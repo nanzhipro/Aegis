@@ -1,4 +1,4 @@
-# Aegis macOS 15+ Product Plan（中文）
+# Aegis macOS 15+ 产品规划
 
 ## 结论
 
@@ -90,7 +90,7 @@ v1 明确不做以下能力：
 - `Login Item` 应使用 `SMAppService`
 - `Full Disk Access` 不能由 App 直接静默授予，只能通过引导用户完成系统设置
 - 公证分发应使用 `notarytool`
-- 视觉风格应遵循 [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) 的原生模式，而不是自定义品牌化壳层
+- 视觉风格应遵循 [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) 的原生模式，而不是自定义品牌化界面
 - 国际化应使用 Xcode `String Catalog`
 - 日志应使用 `Logger` / unified logging，并对敏感数据应用隐私标记
 
