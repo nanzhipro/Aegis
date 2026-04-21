@@ -1,0 +1,599 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'json'
+require 'optparse'
+require 'pathname'
+require 'time'
+require 'yaml'
+
+class PlanCtl
+  def initialize(repo_root)
+    @repo_root = Pathname.new(repo_root)
+    @manifest_path = @repo_root.join('plan', 'manifest.yaml')
+    @manifest = load_yaml(@manifest_path)
+  end
+
+  def resolve(phase_id, format:, strict:)
+    result = build_resolve_result(fetch_phase(phase_id), load_state)
+
+    render_resolve(result, format)
+    exit(2) if strict && !result['ready']
+  end
+
+  def next_phase(format:, strict:)
+    state = load_state
+    phase = first_remaining_phase(Array(state['completed_phases']))
+
+    unless phase
+      render_no_remaining_phases(format)
+      return
+    end
+
+    result = build_resolve_result(phase, state)
+    render_resolve(result, format)
+    exit(2) if strict && !result['ready']
+  end
+
+  def status(format:)
+    result = build_status_result(load_state)
+
+    case format
+    when 'json'
+      puts JSON.pretty_generate(result)
+    else
+      puts "Aegis plan state"
+      puts "State file: #{result['state_file']}"
+      puts "Handoff file: #{result['handoff_file']}"
+      puts
+      puts "Completed phases: #{result['completed_phases'].empty? ? 'none' : result['completed_phases'].join(', ')}"
+      puts
+      if result['next_phase']
+        puts "Next phase: #{result['next_phase']['phase_id']} #{result['next_phase']['title']}"
+      else
+        puts 'Next phase: none'
+      end
+      puts
+      puts 'Available phases:'
+      if result['available_phases'].empty?
+        puts '- none'
+      else
+        result['available_phases'].each do |phase|
+          puts "- #{phase['phase_id']}: #{phase['title']}"
+        end
+      end
+      puts
+      puts 'Blocked phases:'
+      if blocked.empty?
+        puts '- none'
+      else
+        result['blocked_phases'].each do |phase|
+          puts "- #{phase['phase_id']}: waiting for #{phase['missing_dependencies'].join(', ')}"
+        end
+      end
+      puts
+      puts 'Remaining queue:'
+      if result['remaining_queue'].empty?
+        puts '- none'
+      else
+        result['remaining_queue'].each do |phase|
+          detail = phase['missing_dependencies'].empty? ? phase['status'] : "#{phase['status']} (waiting for #{phase['missing_dependencies'].join(', ')})"
+          puts "- #{phase['phase_id']}: #{phase['title']} [#{detail}]"
+        end
+      end
+    end
+  end
+
+  def complete(phase_id, summary:, next_focus:)
+    phase = fetch_phase(phase_id)
+    state = load_state(create_if_missing: true)
+    completed = Array(state['completed_phases'])
+    missing_dependencies = Array(phase['depends_on']) - completed
+
+    unless missing_dependencies.empty?
+      warn "Cannot complete #{phase_id}. Missing dependencies: #{missing_dependencies.join(', ')}"
+      exit 2
+    end
+
+    if completed.include?(phase_id)
+      puts "Phase already completed: #{phase_id}"
+      return
+    end
+
+    completed << phase_id
+    ordered = manifest_phases.map { |entry| entry['id'] }.select { |id| completed.include?(id) }
+    completion_log = Array(state['completion_log'])
+    timestamp = Time.now.utc.iso8601
+    completion_entry = {
+      'phase_id' => phase_id,
+      'completed_at' => timestamp
+    }
+    completion_entry['summary'] = summary unless blank?(summary)
+    completion_entry['next_focus'] = next_focus unless blank?(next_focus)
+    completion_log << completion_entry
+
+    new_state = state.merge(
+      'version' => state['version'] || 1,
+      'completed_phases' => ordered,
+      'completion_log' => completion_log,
+      'updated_at' => timestamp
+    )
+
+    write_state(new_state)
+    write_handoff_file(new_state)
+    puts "Marked complete: #{phase_id}"
+    puts "Updated state file: #{state_file_relative}"
+    puts "Updated handoff file: #{handoff_file_relative}"
+  end
+
+  def handoff(format:, write:)
+    state = load_state(create_if_missing: write)
+    snapshot = build_handoff_snapshot(state)
+
+    write_handoff_file(state, snapshot) if write
+    render_handoff(snapshot, format)
+    puts "Updated handoff file: #{handoff_file_relative}" if write && format != 'json'
+  end
+
+  private
+
+  def build_resolve_result(phase, state)
+    completed = Array(state['completed_phases'])
+    dependencies = Array(phase['depends_on'])
+    missing_dependencies = dependencies - completed
+    required_context = normalized_context_for(phase)
+    missing_context_files = required_context.reject { |path| @repo_root.join(path).file? }
+
+    {
+      'phase_id' => phase['id'],
+      'title' => phase['title'],
+      'plan_file' => phase['plan_file'],
+      'execution_file' => phase['execution_file'],
+      'required_context' => required_context,
+      'depends_on' => dependencies,
+      'completed_dependencies' => dependencies & completed,
+      'missing_dependencies' => missing_dependencies,
+      'missing_context_files' => missing_context_files,
+      'resolver' => @manifest.dig('execution_rule', 'resolver'),
+      'state_file' => state_file_relative,
+      'handoff_file' => handoff_file_relative,
+      'ready' => missing_dependencies.empty? && missing_context_files.empty?
+    }
+  end
+
+  def build_status_result(state)
+    completed = Array(state['completed_phases'])
+    phases = manifest_phases
+    available = phases.select do |phase|
+      !completed.include?(phase['id']) && (Array(phase['depends_on']) - completed).empty?
+    end
+
+    blocked = phases.each_with_object([]) do |phase, result|
+      next if completed.include?(phase['id'])
+      next if available.any? { |candidate| candidate['id'] == phase['id'] }
+
+      result << {
+        'phase_id' => phase['id'],
+        'title' => phase['title'],
+        'missing_dependencies' => Array(phase['depends_on']) - completed
+      }
+    end
+
+    remaining_queue = phases.reject { |phase| completed.include?(phase['id']) }.map do |phase|
+      missing_dependencies = Array(phase['depends_on']) - completed
+      summarize_phase(phase).merge(
+        'status' => missing_dependencies.empty? ? 'ready' : 'blocked',
+        'missing_dependencies' => missing_dependencies
+      )
+    end
+
+    {
+      'completed_phases' => completed,
+      'available_phases' => available.map { |phase| summarize_phase(phase) },
+      'blocked_phases' => blocked,
+      'remaining_queue' => remaining_queue,
+      'next_phase' => remaining_queue.first,
+      'state_file' => state_file_relative,
+      'handoff_file' => handoff_file_relative
+    }
+  end
+
+  def build_handoff_snapshot(state)
+    status = build_status_result(state)
+    next_phase = status['next_phase']
+    next_required_context = if next_phase
+                              normalized_context_for(fetch_phase(next_phase['phase_id']))
+                            else
+                              []
+                            end
+
+    {
+      'state_file' => state_file_relative,
+      'handoff_file' => handoff_file_relative,
+      'updated_at' => state['updated_at'],
+      'completed_phases' => status['completed_phases'],
+      'recent_completions' => Array(state['completion_log']).last(compression_history_limit).map { |entry| decorate_completion_entry(entry) },
+      'next_phase' => next_phase,
+      'next_required_context' => next_required_context,
+      'remaining_queue' => status['remaining_queue'],
+      'resume_read_order' => resume_read_order,
+      'compression_rules' => compression_rules,
+      'continuous_execution' => @manifest.dig('execution_rule', 'continuous_execution') || {}
+    }
+  end
+
+  def summarize_phase(phase)
+    {
+      'phase_id' => phase['id'],
+      'title' => phase['title'],
+      'plan_file' => phase['plan_file'],
+      'execution_file' => phase['execution_file']
+    }
+  end
+
+  def render_resolve(result, format)
+    case format
+    when 'json'
+      puts JSON.pretty_generate(result)
+    when 'paths'
+      puts result['required_context'].join("\n")
+    else
+      puts "Aegis phase context"
+      puts "Target phase: #{result['phase_id']} #{result['title']}"
+      puts "Resolver: #{result['resolver']}"
+      puts "State file: #{result['state_file']}"
+      puts "Handoff file: #{result['handoff_file']}"
+      puts
+      puts 'Read these files in order before making changes:'
+      result['required_context'].each_with_index do |path, index|
+        puts "#{index + 1}. #{path}"
+      end
+      puts
+      puts 'Dependency status:'
+      puts "- depends_on: #{format_list(result['depends_on'])}"
+      puts "- completed: #{format_list(result['completed_dependencies'])}"
+      puts "- missing: #{format_list(result['missing_dependencies'])}"
+      puts
+      puts 'Context file status:'
+      puts "- missing files: #{format_list(result['missing_context_files'])}"
+      puts
+      puts 'Execution contract:'
+      puts '- Do not start implementation before reading every required_context file.'
+      puts '- Treat plan/common.md as the global hard constraints.'
+      puts '- Treat the execution file as the scope boundary, deliverable contract, and completion checklist.'
+      puts '- If dependencies or required context files are missing, stop and report the blocker instead of editing files.'
+      puts '- For long multi-phase runs, complete this phase with a summary and refresh plan/handoff.md before moving on.'
+    end
+  end
+
+  def render_no_remaining_phases(format)
+    result = {
+      'complete' => true,
+      'message' => 'All phases are completed.',
+      'state_file' => state_file_relative,
+      'handoff_file' => handoff_file_relative
+    }
+
+    case format
+    when 'json'
+      puts JSON.pretty_generate(result)
+    else
+      puts 'All phases are completed.'
+      puts "State file: #{result['state_file']}"
+      puts "Handoff file: #{result['handoff_file']}"
+    end
+  end
+
+  def render_handoff(snapshot, format)
+    case format
+    when 'json'
+      puts JSON.pretty_generate(snapshot)
+    else
+      puts "Aegis execution handoff"
+      puts "State file: #{snapshot['state_file']}"
+      puts "Handoff file: #{snapshot['handoff_file']}"
+      puts "Updated at: #{snapshot['updated_at'] || 'not recorded yet'}"
+      puts
+      puts "Completed phases: #{snapshot['completed_phases'].empty? ? 'none' : snapshot['completed_phases'].join(', ')}"
+      puts
+      if snapshot['recent_completions'].empty?
+        puts 'Recent completions: none'
+      else
+        puts 'Recent completions:'
+        snapshot['recent_completions'].each do |entry|
+          detail = entry['summary'] || 'no summary recorded'
+          puts "- #{entry['phase_id']}: #{detail}"
+          puts "  next focus: #{entry['next_focus']}" if entry['next_focus']
+        end
+      end
+      puts
+      if snapshot['next_phase']
+        puts "Next phase: #{snapshot['next_phase']['phase_id']} #{snapshot['next_phase']['title']}"
+        puts 'Read these files next:'
+        snapshot['next_required_context'].each_with_index do |path, index|
+          puts "#{index + 1}. #{path}"
+        end
+      else
+        puts 'Next phase: none'
+      end
+      puts
+      puts 'Compression-safe resume order:'
+      snapshot['resume_read_order'].each_with_index do |item, index|
+        puts "#{index + 1}. #{item}"
+      end
+      puts
+      puts 'Compression rules:'
+      snapshot['compression_rules'].each do |rule|
+        puts "- #{rule}"
+      end
+    end
+  end
+
+  def decorate_completion_entry(entry)
+    phase = fetch_phase(entry['phase_id'])
+    {
+      'phase_id' => entry['phase_id'],
+      'title' => phase['title'],
+      'completed_at' => entry['completed_at'],
+      'summary' => entry['summary'],
+      'next_focus' => entry['next_focus']
+    }
+  end
+
+  def handoff_markdown(snapshot)
+    lines = []
+    lines << '# Aegis Execution Handoff'
+    lines << ''
+    lines << '本文件用于长流程执行时的压缩恢复。不要一次性重新加载全部 phase 文档；恢复时按本文档与 manifest 继续。'
+    lines << ''
+    lines << '## 当前状态'
+    lines << ''
+    lines << "- State file: `#{snapshot['state_file']}`"
+    lines << "- Handoff file: `#{snapshot['handoff_file']}`"
+    lines << "- Updated at: `#{snapshot['updated_at'] || 'not recorded yet'}`"
+    lines << "- Completed phases: `#{snapshot['completed_phases'].empty? ? 'none' : snapshot['completed_phases'].join(', ')}`"
+    lines << ''
+
+    lines << '## 最近完成'
+    lines << ''
+    if snapshot['recent_completions'].empty?
+      lines << '- none'
+    else
+      snapshot['recent_completions'].each do |entry|
+        lines << "- `#{entry['phase_id']}` #{entry['title']}: #{entry['summary'] || 'no summary recorded'}"
+        lines << "- next focus: #{entry['next_focus']}" if entry['next_focus']
+      end
+    end
+    lines << ''
+
+    lines << '## 下一 Phase'
+    lines << ''
+    if snapshot['next_phase']
+      lines << "- `#{snapshot['next_phase']['phase_id']}` #{snapshot['next_phase']['title']}"
+      lines << "- plan: `#{snapshot['next_phase']['plan_file']}`"
+      lines << "- execution: `#{snapshot['next_phase']['execution_file']}`"
+      lines << ''
+      lines << '下一步读取顺序：'
+      snapshot['next_required_context'].each_with_index do |path, index|
+        lines << "#{index + 1}. `#{path}`"
+      end
+    else
+      lines << '- none'
+    end
+    lines << ''
+
+    lines << '## 压缩恢复顺序'
+    lines << ''
+    snapshot['resume_read_order'].each_with_index do |item, index|
+      lines << "#{index + 1}. `#{item}`"
+    end
+    lines << ''
+
+    lines << '## 压缩控制规则'
+    lines << ''
+    snapshot['compression_rules'].each do |rule|
+      lines << "- #{rule}"
+    end
+    lines << ''
+
+    lines << '## 连续执行命令'
+    lines << ''
+    continuous_execution = snapshot['continuous_execution']
+    lines << "- next: `#{continuous_execution['next_command']}`" if continuous_execution['next_command']
+    lines << "- complete: `#{continuous_execution['completion_command']}`" if continuous_execution['completion_command']
+    lines << "- handoff: `ruby scripts/planctl handoff --write`"
+    lines << ''
+
+    lines.join("\n")
+  end
+
+  def normalized_context_for(phase)
+    unique_paths(
+      Array(@manifest.dig('execution_rule', 'required_context')) +
+      Array(phase['required_context']) +
+      [phase['plan_file'], phase['execution_file']]
+    )
+  end
+
+  def unique_paths(paths)
+    paths.compact.each_with_object([]) do |path, result|
+      result << path unless result.include?(path)
+    end
+  end
+
+  def first_remaining_phase(completed)
+    manifest_phases.find { |phase| !completed.include?(phase['id']) }
+  end
+
+  def blank?(value)
+    value.nil? || value.strip.empty?
+  end
+
+  def format_list(values)
+    values.empty? ? 'none' : values.join(', ')
+  end
+
+  def fetch_phase(phase_id)
+    phase = manifest_phases.find { |entry| entry['id'] == phase_id }
+    return phase if phase
+
+    warn "Unknown phase: #{phase_id}"
+    warn "Known phases: #{manifest_phases.map { |entry| entry['id'] }.join(', ')}"
+    exit 1
+  end
+
+  def manifest_phases
+    Array(@manifest['phases'])
+  end
+
+  def load_state(create_if_missing: false)
+    path = state_file_path
+    return load_yaml(path) if path.file?
+
+    default_state = {
+      'version' => 1,
+      'completed_phases' => [],
+      'completion_log' => []
+    }
+
+    write_state(default_state) if create_if_missing
+    default_state
+  end
+
+  def write_state(state)
+    path = state_file_path
+    path.dirname.mkpath
+    File.write(path, YAML.dump(state))
+  end
+
+  def write_handoff_file(state, snapshot = nil)
+    path = handoff_file_path
+    path.dirname.mkpath
+    File.write(path, handoff_markdown(snapshot || build_handoff_snapshot(state)))
+  end
+
+  def state_file_relative
+    @manifest.dig('execution_rule', 'state_file') || 'plan/state.yaml'
+  end
+
+  def state_file_path
+    @repo_root.join(state_file_relative)
+  end
+
+  def handoff_file_relative
+    @manifest.dig('execution_rule', 'handoff_file') || 'plan/handoff.md'
+  end
+
+  def handoff_file_path
+    @repo_root.join(handoff_file_relative)
+  end
+
+  def compression_history_limit
+    @manifest.dig('execution_rule', 'compression_control', 'max_completion_history') || 3
+  end
+
+  def resume_read_order
+    Array(@manifest.dig('execution_rule', 'compression_control', 'resume_read_order'))
+  end
+
+  def compression_rules
+    Array(@manifest.dig('execution_rule', 'compression_control', 'rules'))
+  end
+
+  def load_yaml(path)
+    YAML.safe_load(File.read(path), permitted_classes: [], aliases: false) || {}
+  rescue Psych::SyntaxError => error
+    warn "Failed to parse YAML: #{path}"
+    warn error.message
+    exit 1
+  end
+end
+
+def usage
+  <<~USAGE
+    Usage:
+      ruby scripts/planctl resolve <phase-id> [--format prompt|json|paths] [--strict]
+      ruby scripts/planctl next [--format prompt|json|paths] [--strict]
+      ruby scripts/planctl status [--format text|json]
+      ruby scripts/planctl complete <phase-id> [--summary TEXT] [--next-focus TEXT]
+      ruby scripts/planctl handoff [--format prompt|json] [--write]
+  USAGE
+end
+
+script_path = File.expand_path(__FILE__)
+repo_root = File.expand_path('..', File.dirname(script_path))
+planctl = PlanCtl.new(repo_root)
+
+command = ARGV.shift
+
+case command
+when 'resolve'
+  options = { format: 'prompt', strict: false }
+  parser = OptionParser.new do |opts|
+    opts.banner = usage
+    opts.on('--format FORMAT', 'prompt, json, or paths') { |value| options[:format] = value }
+    opts.on('--strict', 'Exit non-zero if dependencies or context files are missing') { options[:strict] = true }
+  end
+  parser.parse!(ARGV)
+  phase_id = ARGV.shift
+  if phase_id.nil? || ARGV.any?
+    warn parser.to_s
+    exit 1
+  end
+  planctl.resolve(phase_id, format: options[:format], strict: options[:strict])
+when 'next'
+  options = { format: 'prompt', strict: false }
+  parser = OptionParser.new do |opts|
+    opts.banner = usage
+    opts.on('--format FORMAT', 'prompt, json, or paths') { |value| options[:format] = value }
+    opts.on('--strict', 'Exit non-zero if dependencies or context files are missing') { options[:strict] = true }
+  end
+  parser.parse!(ARGV)
+  if ARGV.any?
+    warn parser.to_s
+    exit 1
+  end
+  planctl.next_phase(format: options[:format], strict: options[:strict])
+when 'status'
+  options = { format: 'text' }
+  parser = OptionParser.new do |opts|
+    opts.banner = usage
+    opts.on('--format FORMAT', 'text or json') { |value| options[:format] = value }
+  end
+  parser.parse!(ARGV)
+  if ARGV.any?
+    warn parser.to_s
+    exit 1
+  end
+  planctl.status(format: options[:format])
+when 'complete'
+  options = { summary: nil, next_focus: nil }
+  parser = OptionParser.new do |opts|
+    opts.banner = usage
+    opts.on('--summary TEXT', 'Concise completion summary to persist for resume') { |value| options[:summary] = value }
+    opts.on('--next-focus TEXT', 'Concise note about what should happen next') { |value| options[:next_focus] = value }
+  end
+  parser.parse!(ARGV)
+  phase_id = ARGV.shift
+  if phase_id.nil? || ARGV.any?
+    warn parser.to_s
+    exit 1
+  end
+  planctl.complete(phase_id, summary: options[:summary], next_focus: options[:next_focus])
+when 'handoff'
+  options = { format: 'prompt', write: false }
+  parser = OptionParser.new do |opts|
+    opts.banner = usage
+    opts.on('--format FORMAT', 'prompt or json') { |value| options[:format] = value }
+    opts.on('--write', 'Write the current handoff snapshot to plan/handoff.md') { options[:write] = true }
+  end
+  parser.parse!(ARGV)
+  if ARGV.any?
+    warn parser.to_s
+    exit 1
+  end
+  planctl.handoff(format: options[:format], write: options[:write])
+else
+  warn usage
+  exit 1
+end

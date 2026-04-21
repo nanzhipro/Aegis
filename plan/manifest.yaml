@@ -1,0 +1,120 @@
+version: 1
+kind: aegis-plan-manifest
+entrypoints:
+  overview: Plan.md
+  common: plan/common.md
+  workflow: plan/workflow.md
+  handoff: plan/handoff.md
+execution_rule:
+  description: >-
+    执行任一 Phase 时，必须同时携带完整通用上下文和当前 Phase 文档。
+    execution 文档负责显式声明这次执行的输入、边界、交付物和完成标准。
+  resolver: scripts/planctl
+  state_file: plan/state.yaml
+  handoff_file: plan/handoff.md
+  repo_instructions: .github/copilot-instructions.md
+  continuous_execution:
+    next_command: ruby scripts/planctl next --format prompt --strict
+    completion_command: >-
+      ruby scripts/planctl complete <phase-id> --summary "<summary>" --next-focus "<next-focus>"
+  enforcement:
+    dependency_check: true
+    stop_on_missing_context: true
+    require_execution_file: true
+  compression_control:
+    enabled: true
+    max_completion_history: 3
+    resume_read_order:
+      - plan/manifest.yaml
+      - plan/handoff.md
+      - next.phase.required_context
+    rules:
+      - 永远不要一次性加载所有 phase 文档。
+      - 只在当前 phase 读取 plan/common.md、当前 phase plan 和当前 phase execution。
+      - 每完成一个 phase 后更新 handoff，再进入下一 phase。
+  read_order:
+    - plan/common.md
+    - phase.plan_file
+    - phase.execution_file
+  required_context:
+    - plan/common.md
+phases:
+  - id: phase-0
+    title: 新建工程与约束固化
+    plan_file: plan/phases/phase-0-bootstrap.md
+    execution_file: plan/execution/phase-0-bootstrap.md
+    required_context:
+      - plan/common.md
+      - plan/phases/phase-0-bootstrap.md
+      - plan/execution/phase-0-bootstrap.md
+    depends_on: []
+  - id: phase-1
+    title: Shared Domain 与 TDD 底座
+    plan_file: plan/phases/phase-1-shared-domain.md
+    execution_file: plan/execution/phase-1-shared-domain.md
+    required_context:
+      - plan/common.md
+      - plan/phases/phase-1-shared-domain.md
+      - plan/execution/phase-1-shared-domain.md
+    depends_on:
+      - phase-0
+  - id: phase-2
+    title: Onboarding 与原生 App 外壳
+    plan_file: plan/phases/phase-2-onboarding-app-shell.md
+    execution_file: plan/execution/phase-2-onboarding-app-shell.md
+    required_context:
+      - plan/common.md
+      - plan/phases/phase-2-onboarding-app-shell.md
+      - plan/execution/phase-2-onboarding-app-shell.md
+    depends_on:
+      - phase-1
+  - id: phase-3
+    title: Agent 与 IPC
+    plan_file: plan/phases/phase-3-agent-ipc.md
+    execution_file: plan/execution/phase-3-agent-ipc.md
+    required_context:
+      - plan/common.md
+      - plan/phases/phase-3-agent-ipc.md
+      - plan/execution/phase-3-agent-ipc.md
+    depends_on:
+      - phase-2
+  - id: phase-4
+    title: Extension 决策引擎
+    plan_file: plan/phases/phase-4-extension-decision-engine.md
+    execution_file: plan/execution/phase-4-extension-decision-engine.md
+    required_context:
+      - plan/common.md
+      - plan/phases/phase-4-extension-decision-engine.md
+      - plan/execution/phase-4-extension-decision-engine.md
+    depends_on:
+      - phase-3
+  - id: phase-5
+    title: 设置页与本地配置
+    plan_file: plan/phases/phase-5-settings-local-config.md
+    execution_file: plan/execution/phase-5-settings-local-config.md
+    required_context:
+      - plan/common.md
+      - plan/phases/phase-5-settings-local-config.md
+      - plan/execution/phase-5-settings-local-config.md
+    depends_on:
+      - phase-4
+  - id: phase-6
+    title: 签名、公证、CI 与发布链路
+    plan_file: plan/phases/phase-6-release-pipeline.md
+    execution_file: plan/execution/phase-6-release-pipeline.md
+    required_context:
+      - plan/common.md
+      - plan/phases/phase-6-release-pipeline.md
+      - plan/execution/phase-6-release-pipeline.md
+    depends_on:
+      - phase-5
+  - id: phase-7
+    title: 特权 Smoke 与发布准备
+    plan_file: plan/phases/phase-7-privileged-smoke-release-readiness.md
+    execution_file: plan/execution/phase-7-privileged-smoke-release-readiness.md
+    required_context:
+      - plan/common.md
+      - plan/phases/phase-7-privileged-smoke-release-readiness.md
+      - plan/execution/phase-7-privileged-smoke-release-readiness.md
+    depends_on:
+      - phase-6
