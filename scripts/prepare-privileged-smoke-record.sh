@@ -27,12 +27,12 @@ final_record_path="docs/release/records/${execution_date}-${sanitized_tag}-privi
 
 privileged_smoke_entrypoint=${AEGIS_PRIVILEGED_SMOKE_ENTRYPOINT:-local manual smoke}
 
-if [ -n "${AEGIS_PRIVILEGED_SMOKE_DMG_SHA256:-}" ]; then
-    dmg_sha256=$AEGIS_PRIVILEGED_SMOKE_DMG_SHA256
-elif [ -f "$DMG_PATH" ]; then
-    dmg_sha256=$(shasum -a 256 "$DMG_PATH" | awk '{ print $1 }')
+if [ -n "${AEGIS_PRIVILEGED_SMOKE_ZIP_SHA256:-}" ]; then
+  zip_sha256=$AEGIS_PRIVILEGED_SMOKE_ZIP_SHA256
+elif [ -f "$ZIP_PATH" ]; then
+  zip_sha256=$(shasum -a 256 "$ZIP_PATH" | awk '{ print $1 }')
 else
-    dmg_sha256=pending
+  zip_sha256=pending
 fi
 
 mkdir -p "$(dirname -- "$output_path")"
@@ -51,7 +51,7 @@ cat >"$output_path" <<EOF
 - Host machine: ${host_machine}
 - macOS version: ${macos_version}
 - Execution environment: ${execution_environment}
-- DMG SHA256: ${dmg_sha256}
+- ZIP SHA256: ${zip_sha256}
 
 ## Preconditions
 
@@ -61,7 +61,7 @@ cat >"$output_path" <<EOF
 
 ## Manual Smoke Results
 
-- DMG download and mount:
+- ZIP download and extraction:
   - Result:
   - Evidence:
   - Notes:

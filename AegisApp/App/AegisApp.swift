@@ -49,11 +49,13 @@ private struct AegisStatusMenuContent: View {
         openWindow(id: AegisApp.mainWindowID)
         NSApplication.shared.activate(ignoringOtherApps: true)
       } label: {
-        Label("aegis.menu.open_app", systemImage: "rectangle.stack")
+        Label(LocalizedStringKey(runtime.openOnboardingActionKey), systemImage: "rectangle.stack")
       }
 
       Button {
         runtime.installSystemExtension()
+        openWindow(id: AegisApp.mainWindowID)
+        NSApplication.shared.activate(ignoringOtherApps: true)
       } label: {
         Label(
           LocalizedStringKey(runtime.systemExtensionInstallActionKey),

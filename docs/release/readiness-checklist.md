@@ -14,8 +14,8 @@
 - [ ] 导出的 `.app` 已使用 `Developer ID Application` 签名。
 - [ ] hardened runtime 已启用。
 - [ ] entitlements 已嵌入且可审计。
-- [ ] `.dmg` 已完成 notarization。
-- [ ] `.dmg` 已 stapled。
+- [ ] `AegisApp.zip` 已完成 notarization。
+- [ ] `AegisApp.app` 已 stapled。
 - [ ] `./scripts/validate-release.sh` 对最终分发产物通过。
 
 ## 特权 smoke

@@ -11,7 +11,7 @@ require_command xcodebuild
 require_command codesign
 require_command security
 require_command xcrun
-require_command hdiutil
+require_command ditto
 require_command ruby
 
 require_xcode_version 15.4

@@ -96,7 +96,6 @@ struct OnboardingFlowView: View {
       .padding(32)
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
-    .accessibilityIdentifier("onboarding.container")
   }
 
   private var welcomeContent: some View {
@@ -128,6 +127,8 @@ struct OnboardingFlowView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
       }
+
+      SystemExtensionInstallationCard(runtime: runtime)
 
       Text("aegis.onboarding.permissions.footer")
         .font(.footnote)

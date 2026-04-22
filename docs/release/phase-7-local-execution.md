@@ -23,7 +23,7 @@
 
 1. 当前本地机器是 macOS 14 及以上。
 2. 当前机器可以完整执行 System Extension、Full Disk Access、Agent 提示与超时回退链路验证。
-3. 已有最终 DMG，可来自 GitHub Release，或来自本地已 notarize 且已 stapled 的最终产物。
+3. 已有最终 `AegisApp.zip`，可来自 GitHub Release，或来自本地已 notarize 且已 stapled 的最终产物。
 4. `./scripts/test.sh`、`./scripts/validate-release.sh` 对应产物已经通过。
 
 ## 最短执行路径
@@ -34,8 +34,8 @@
 
 ```sh
 # 二选一：
-# 方案 A：从 GitHub Release 下载最终 DMG
-# 方案 B：直接使用本地 build/release/AegisApp.dmg
+# 方案 A：从 GitHub Release 下载最终 AegisApp.zip
+# 方案 B：直接使用本地 build/release/AegisApp.zip
 ```
 
 1. 校验最终产物。
@@ -60,7 +60,7 @@ AEGIS_PRIVILEGED_SMOKE_ENVIRONMENT='local-full-test-environment' \
 
 1. 在本地机器上逐项完成以下人工检查：
 
-- 安装并挂载 DMG。
+- 解压 `AegisApp.zip` 并将 `AegisApp.app` 拖入 `/Applications`。
 - 首次启动确认 onboarding 出现。
 - 触发 System Extension 安装并在系统设置中完成批准。
 - 按引导完成 Full Disk Access。

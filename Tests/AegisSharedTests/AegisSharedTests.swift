@@ -72,6 +72,103 @@ final class AegisSharedTests: XCTestCase {
     XCTAssertEqual(decisionCopy, decision)
   }
 
+  func testCrossProcessDTOsRoundTripThroughSecureCoding() throws {
+    let request = makeRequest()
+    let decision = AccessPromptDecision(
+      requestID: request.requestID,
+      decision: .allow,
+      source: .user,
+      rememberChoice: true,
+      respondedAt: Date(timeIntervalSince1970: 4_000)
+    )
+    var snapshot = IPCStatusSnapshot.empty(now: Date(timeIntervalSince1970: 4_100))
+    snapshot.loginItemEnabled = true
+    var store = LocalPolicyStore.defaultStore(
+      homeDirectoryURL: URL(fileURLWithPath: "/Users/secure-coding", isDirectory: true))
+    store.applyRememberedDecision(decision, for: request, at: Date(timeIntervalSince1970: 4_000))
+
+    try assertSecureCodingRoundTrip(request, as: AccessPromptRequest.self)
+    try assertSecureCodingRoundTrip(decision, as: AccessPromptDecision.self)
+    try assertSecureCodingRoundTrip(snapshot, as: IPCStatusSnapshot.self)
+    try assertSecureCodingRoundTrip(store, as: LocalPolicyStore.self)
+  }
+
+  func testXPCProtocolsAreExposedToObjectiveC() {
+    XCTAssertNotNil(NSProtocolFromString("AegisExtensionControlProtocol"))
+    XCTAssertNotNil(NSProtocolFromString("AegisAppObserverProtocol"))
+    XCTAssertNotNil(NSProtocolFromString("AegisAgentPromptProtocol"))
+  }
+
+  func testXPCInterfacesRegisterAllCrossProcessDTOClasses() {
+    let extensionControl = AegisXPCInterfaces.extensionControl()
+    let appObserver = AegisXPCInterfaces.appObserver()
+    let agentPrompt = AegisXPCInterfaces.agentPrompt()
+
+    assertRegisteredClass(
+      IPCStatusSnapshot.self,
+      in: extensionControl,
+      selector: #selector(AegisExtensionControlProtocol.snapshot(withReply:)),
+      argumentIndex: 0,
+      ofReply: true
+    )
+    assertRegisteredClass(
+      IPCStatusSnapshot.self,
+      in: extensionControl,
+      selector: #selector(AegisExtensionControlProtocol.updateLoginItemEnabled(_:withReply:)),
+      argumentIndex: 0,
+      ofReply: true
+    )
+    assertRegisteredClass(
+      AccessPromptDecision.self,
+      in: extensionControl,
+      selector: #selector(AegisExtensionControlProtocol.submitDecision(_:withReply:)),
+      argumentIndex: 0,
+      ofReply: false
+    )
+    assertRegisteredClass(
+      NSError.self,
+      in: extensionControl,
+      selector: #selector(AegisExtensionControlProtocol.reloadPolicy(withReply:)),
+      argumentIndex: 1,
+      ofReply: true
+    )
+    assertRegisteredClass(
+      IPCStatusSnapshot.self,
+      in: appObserver,
+      selector: #selector(AegisAppObserverProtocol.statusDidChange(_:)),
+      argumentIndex: 0,
+      ofReply: false
+    )
+    assertRegisteredClass(
+      ExtensionDiagnosticEvent.self,
+      in: appObserver,
+      selector: #selector(AegisAppObserverProtocol.extensionDidEmitDiagnostic(_:)),
+      argumentIndex: 0,
+      ofReply: false
+    )
+    assertRegisteredClass(
+      AccessPromptRequest.self,
+      in: agentPrompt,
+      selector: #selector(AegisAgentPromptProtocol.presentPrompt(_:)),
+      argumentIndex: 0,
+      ofReply: false
+    )
+    assertRegisteredClass(
+      NSUUID.self,
+      in: agentPrompt,
+      selector: #selector(AegisAgentPromptProtocol.cancelPrompt(requestID:)),
+      argumentIndex: 0,
+      ofReply: false
+    )
+    assertRegisteredClass(
+      IPCStatusSnapshot.self,
+      in: agentPrompt,
+      selector: #selector(AegisAgentPromptProtocol.policyDidReload(_:)),
+      argumentIndex: 0,
+      ofReply: false
+    )
+  }
+
   func testRememberedDecisionMatchesOnlyExactGranularity() {
     let request = makeRequest()
     let matchingRule = RememberedDecisionRule(
@@ -233,5 +330,49 @@ final class AegisSharedTests: XCTestCase {
       try? FileManager.default.removeItem(at: directory)
     }
     return directory
+  }
+
+  private func assertSecureCodingRoundTrip<T: Equatable>(
+    _ value: T,
+    as type: T.Type,
+    file: StaticString = #filePath,
+    line: UInt = #line
+  ) throws {
+    let archivedData = try NSKeyedArchiver.archivedData(
+      withRootObject: value,
+      requiringSecureCoding: true
+    )
+    let decoded = try XCTUnwrap(
+      try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(archivedData) as? T,
+      file: file,
+      line: line
+    )
+
+    XCTAssertEqual(decoded, value, file: file, line: line)
+  }
+
+  private func assertRegisteredClass(
+    _ expectedClass: AnyClass,
+    in interface: NSXPCInterface,
+    selector: Selector,
+    argumentIndex: Int,
+    ofReply: Bool,
+    file: StaticString = #filePath,
+    line: UInt = #line
+  ) {
+    let registeredNames = Set(
+      (interface.classes(for: selector, argumentIndex: argumentIndex, ofReply: ofReply) ?? []).map {
+        if let registeredClass = $0.base as? AnyClass {
+          return NSStringFromClass(registeredClass)
+        }
+
+        return String(describing: $0.base)
+      })
+
+    XCTAssertTrue(
+      registeredNames.contains(NSStringFromClass(expectedClass)),
+      file: file,
+      line: line
+    )
   }
 }

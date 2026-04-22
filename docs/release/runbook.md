@@ -16,7 +16,7 @@
 - 发布环境预检查：`./scripts/bootstrap.sh`
 - 归档：`./scripts/archive.sh`
 - 签名：`./scripts/sign.sh`
-- 打包 DMG：`./scripts/package-dmg.sh`
+- 打包发布 zip：`./scripts/package-app.sh`
 - 公证：`./scripts/notarize.sh`
 - 发布校验：`./scripts/validate-release.sh`
 - GitHub 托管发布流水线：`.github/workflows/release.yml`
@@ -55,7 +55,7 @@
 ./scripts/test.sh
 ./scripts/archive.sh
 ./scripts/sign.sh
-./scripts/package-dmg.sh
+./scripts/package-app.sh
 ./scripts/validate-release.sh
 ```
 
@@ -71,7 +71,7 @@
 - 如果设置了 `APPLE_NOTARY_KEYCHAIN_PROFILE` 或 `AEGIS_NOTARY_KEYCHAIN_PROFILE`，`./scripts/notarize.sh` 会直接使用本地 Keychain 中已保存的 notarytool profile。
 - 如果没有设置 profile，脚本会回退到现有的 App Store Connect API key 流程。
 
-预跑目的不是代替 GitHub Release，而是尽早发现签名、公证、DMG 与验证脚本回归。
+预跑目的不是代替 GitHub Release，而是尽早发现签名、公证、zip 与验证脚本回归。
 
 ### 2. 触发 GitHub Release
 
@@ -85,9 +85,9 @@
 1. 选择 Xcode 15.4。
 2. 运行 `./scripts/bootstrap.sh`。
 3. 运行 `./scripts/test.sh`。
-4. 归档、签名、打包 DMG、公证、发布校验。
-5. 上传 `Aegis.xcarchive`、`AegisApp.app`、`AegisApp.dmg` 与公证日志。
-6. 将 `AegisApp.dmg` 上传到对应 GitHub Release。
+4. 归档、签名、打包 zip、公证、发布校验。
+5. 上传 `Aegis.xcarchive`、`AegisApp.app`、`AegisApp.zip` 与公证日志。
+6. 将 `AegisApp.zip` 上传到对应 GitHub Release。
 
 ### 3. 在本地完整测试环境执行特权 smoke
 
@@ -95,7 +95,7 @@ release 完成后，在本地 macOS 14 及以上完整测试环境执行 phase-7
 
 推荐顺序如下：
 
-1. 从 GitHub Release 下载 `AegisApp.dmg`，或直接使用本地已 notarize 且已 stapled 的最终 DMG。
+1. 从 GitHub Release 下载 `AegisApp.zip`，或直接使用本地已 notarize 且已 stapled 的最终 zip。
 2. 解包并运行 `./scripts/validate-release.sh` 验证签名、stapler 与 Gatekeeper。
 3. 运行 `./scripts/prepare-privileged-smoke-record.sh` 生成带 release 元数据的本地记录草稿。
 4. 按 `docs/release/privileged-smoke-checklist.md` 执行所有人工步骤，并把证据补到记录草稿中。
@@ -145,7 +145,7 @@ release 完成后，在本地 macOS 14 及以上完整测试环境执行 phase-7
 ### release workflow 失败
 
 - 优先查看失败步骤对应的脚本输出。
-- 若失败发生在签名、公证或 DMG 验证，先在受信开发机复现对应脚本。
+- 若失败发生在签名、公证或 zip 验证，先在受信开发机复现对应脚本。
 - 未修复前不得重试 privileged smoke。
 
 ### privileged smoke 失败

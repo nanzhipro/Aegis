@@ -236,25 +236,25 @@
         }
       }
     },
-    "aegis.menu.open_app" : {
-      "comment" : "Menu item title for opening the main Aegis window from the status item.",
+    "aegis.menu.open_onboarding" : {
+      "comment" : "Menu item title for reopening the onboarding or main status window from the status item.",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open Aegis"
+            "value" : "Open Onboarding"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aegis を開く"
+            "value" : "オンボーディングを開く"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开 Aegis"
+            "value" : "打开新手引导"
           }
         }
       }

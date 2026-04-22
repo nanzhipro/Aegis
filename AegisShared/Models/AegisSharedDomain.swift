@@ -13,6 +13,33 @@ public enum AccessEventType {
   public static let authOpen = "AUTH_OPEN"
 }
 
+enum AegisSecureCodingBridge {
+  private static func encoder() -> JSONEncoder {
+    let encoder = JSONEncoder()
+    encoder.dateEncodingStrategy = .iso8601
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    return encoder
+  }
+
+  private static func decoder() -> JSONDecoder {
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
+    return decoder
+  }
+
+  static func encode<T: Encodable>(_ value: T) -> Data? {
+    try? encoder().encode(value)
+  }
+
+  static func decode<T: Decodable>(_ type: T.Type, from data: Data?) -> T? {
+    guard let data else {
+      return nil
+    }
+
+    return try? decoder().decode(type, from: data)
+  }
+}
+
 public struct ProtectedWorkspace: Codable, Identifiable, Hashable, Sendable {
   public let id: UUID
   public var name: String
@@ -152,13 +179,74 @@ public struct RememberedDecisionRule: Codable, Identifiable, Hashable, Sendable 
   }
 }
 
-public struct LocalPolicyStore: Codable, Hashable, Sendable {
+public final class LocalPolicyStore: NSObject, NSSecureCoding, Codable, @unchecked Sendable {
   public var settings: PolicySettings
   public var rememberedRules: [RememberedDecisionRule]
 
   public init(settings: PolicySettings, rememberedRules: [RememberedDecisionRule]) {
     self.settings = settings
     self.rememberedRules = rememberedRules
+  }
+
+  public static var supportsSecureCoding: Bool {
+    true
+  }
+
+  public override func isEqual(_ object: Any?) -> Bool {
+    guard let object = object as? LocalPolicyStore else {
+      return false
+    }
+
+    return settings == object.settings && rememberedRules == object.rememberedRules
+  }
+
+  public override var hash: Int {
+    var hasher = Hasher()
+    hasher.combine(settings)
+    hasher.combine(rememberedRules)
+    return hasher.finalize()
+  }
+
+  public required convenience init?(coder: NSCoder) {
+    guard
+      let settings = AegisSecureCodingBridge.decode(
+        PolicySettings.self,
+        from: coder.decodeObject(of: NSData.self, forKey: "settings") as Data?),
+      let rememberedRules = AegisSecureCodingBridge.decode(
+        [RememberedDecisionRule].self,
+        from: coder.decodeObject(of: NSData.self, forKey: "rememberedRules") as Data?)
+    else {
+      return nil
+    }
+
+    self.init(settings: settings, rememberedRules: rememberedRules)
+  }
+
+  public func encode(with coder: NSCoder) {
+    coder.encode(AegisSecureCodingBridge.encode(settings) as NSData?, forKey: "settings")
+    coder.encode(
+      AegisSecureCodingBridge.encode(rememberedRules) as NSData?,
+      forKey: "rememberedRules"
+    )
+  }
+
+  enum CodingKeys: String, CodingKey {
+    case settings
+    case rememberedRules
+  }
+
+  public required convenience init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.init(
+      settings: try container.decode(PolicySettings.self, forKey: .settings),
+      rememberedRules: try container.decode([RememberedDecisionRule].self, forKey: .rememberedRules)
+    )
+  }
+
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(settings, forKey: .settings)
+    try container.encode(rememberedRules, forKey: .rememberedRules)
   }
 
   public static func defaultStore(
@@ -172,7 +260,7 @@ public struct LocalPolicyStore: Codable, Hashable, Sendable {
     rememberedRules.last(where: { $0.matches(request: request) })
   }
 
-  public mutating func applyRememberedDecision(
+  public func applyRememberedDecision(
     _ decision: AccessPromptDecision, for request: AccessPromptRequest, at timestamp: Date = Date()
   ) {
     guard decision.rememberChoice else {
@@ -209,7 +297,7 @@ public struct LocalPolicyStore: Codable, Hashable, Sendable {
     )
   }
 
-  public mutating func clearRememberedDecisions(workspaceID: UUID? = nil) {
+  public func clearRememberedDecisions(workspaceID: UUID? = nil) {
     guard let workspaceID else {
       rememberedRules.removeAll()
       return
@@ -219,7 +307,7 @@ public struct LocalPolicyStore: Codable, Hashable, Sendable {
   }
 }
 
-public struct AccessPromptRequest: Codable, Hashable, Sendable {
+public final class AccessPromptRequest: NSObject, NSSecureCoding, Codable, @unchecked Sendable {
   public let requestID: UUID
   public let eventType: String
   public let targetPath: String
@@ -257,9 +345,136 @@ public struct AccessPromptRequest: Codable, Hashable, Sendable {
     self.isAppleSigned = isAppleSigned
     self.deadline = deadline
   }
+
+  public static var supportsSecureCoding: Bool {
+    true
+  }
+
+  public override func isEqual(_ object: Any?) -> Bool {
+    guard let object = object as? AccessPromptRequest else {
+      return false
+    }
+
+    return requestID == object.requestID
+      && eventType == object.eventType
+      && targetPath == object.targetPath
+      && workspaceID == object.workspaceID
+      && workspaceName == object.workspaceName
+      && processPath == object.processPath
+      && pid == object.pid
+      && signingIdentifier == object.signingIdentifier
+      && teamIdentifier == object.teamIdentifier
+      && isAppleSigned == object.isAppleSigned
+      && deadline == object.deadline
+  }
+
+  public override var hash: Int {
+    var hasher = Hasher()
+    hasher.combine(requestID)
+    hasher.combine(eventType)
+    hasher.combine(targetPath)
+    hasher.combine(workspaceID)
+    hasher.combine(workspaceName)
+    hasher.combine(processPath)
+    hasher.combine(pid)
+    hasher.combine(signingIdentifier)
+    hasher.combine(teamIdentifier)
+    hasher.combine(isAppleSigned)
+    hasher.combine(deadline)
+    return hasher.finalize()
+  }
+
+  public required convenience init?(coder: NSCoder) {
+    guard
+      let requestID = coder.decodeObject(of: NSUUID.self, forKey: "requestID") as UUID?,
+      let eventType = coder.decodeObject(of: NSString.self, forKey: "eventType") as String?,
+      let targetPath = coder.decodeObject(of: NSString.self, forKey: "targetPath") as String?,
+      let workspaceID = coder.decodeObject(of: NSUUID.self, forKey: "workspaceID") as UUID?,
+      let workspaceName = coder.decodeObject(of: NSString.self, forKey: "workspaceName") as String?,
+      let processPath = coder.decodeObject(of: NSString.self, forKey: "processPath") as String?,
+      let deadline = coder.decodeObject(of: NSDate.self, forKey: "deadline") as Date?
+    else {
+      return nil
+    }
+
+    self.init(
+      requestID: requestID,
+      eventType: eventType,
+      targetPath: targetPath,
+      workspaceID: workspaceID,
+      workspaceName: workspaceName,
+      processPath: processPath,
+      pid: Int32(coder.decodeInt64(forKey: "pid")),
+      signingIdentifier: coder.decodeObject(of: NSString.self, forKey: "signingIdentifier")
+        as String?,
+      teamIdentifier: coder.decodeObject(of: NSString.self, forKey: "teamIdentifier") as String?,
+      isAppleSigned: coder.decodeBool(forKey: "isAppleSigned"),
+      deadline: deadline
+    )
+  }
+
+  public func encode(with coder: NSCoder) {
+    coder.encode(requestID as NSUUID, forKey: "requestID")
+    coder.encode(eventType as NSString, forKey: "eventType")
+    coder.encode(targetPath as NSString, forKey: "targetPath")
+    coder.encode(workspaceID as NSUUID, forKey: "workspaceID")
+    coder.encode(workspaceName as NSString, forKey: "workspaceName")
+    coder.encode(processPath as NSString, forKey: "processPath")
+    coder.encode(Int(pid), forKey: "pid")
+    coder.encode(signingIdentifier as NSString?, forKey: "signingIdentifier")
+    coder.encode(teamIdentifier as NSString?, forKey: "teamIdentifier")
+    coder.encode(isAppleSigned, forKey: "isAppleSigned")
+    coder.encode(deadline as NSDate, forKey: "deadline")
+  }
+
+  enum CodingKeys: String, CodingKey {
+    case requestID
+    case eventType
+    case targetPath
+    case workspaceID
+    case workspaceName
+    case processPath
+    case pid
+    case signingIdentifier
+    case teamIdentifier
+    case isAppleSigned
+    case deadline
+  }
+
+  public required convenience init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.init(
+      requestID: try container.decode(UUID.self, forKey: .requestID),
+      eventType: try container.decode(String.self, forKey: .eventType),
+      targetPath: try container.decode(String.self, forKey: .targetPath),
+      workspaceID: try container.decode(UUID.self, forKey: .workspaceID),
+      workspaceName: try container.decode(String.self, forKey: .workspaceName),
+      processPath: try container.decode(String.self, forKey: .processPath),
+      pid: try container.decode(Int32.self, forKey: .pid),
+      signingIdentifier: try container.decodeIfPresent(String.self, forKey: .signingIdentifier),
+      teamIdentifier: try container.decodeIfPresent(String.self, forKey: .teamIdentifier),
+      isAppleSigned: try container.decode(Bool.self, forKey: .isAppleSigned),
+      deadline: try container.decode(Date.self, forKey: .deadline)
+    )
+  }
+
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(requestID, forKey: .requestID)
+    try container.encode(eventType, forKey: .eventType)
+    try container.encode(targetPath, forKey: .targetPath)
+    try container.encode(workspaceID, forKey: .workspaceID)
+    try container.encode(workspaceName, forKey: .workspaceName)
+    try container.encode(processPath, forKey: .processPath)
+    try container.encode(pid, forKey: .pid)
+    try container.encodeIfPresent(signingIdentifier, forKey: .signingIdentifier)
+    try container.encodeIfPresent(teamIdentifier, forKey: .teamIdentifier)
+    try container.encode(isAppleSigned, forKey: .isAppleSigned)
+    try container.encode(deadline, forKey: .deadline)
+  }
 }
 
-public struct AccessPromptDecision: Codable, Hashable, Sendable {
+public final class AccessPromptDecision: NSObject, NSSecureCoding, Codable, @unchecked Sendable {
   public let requestID: UUID
   public let decision: AccessDecision
   public let source: DecisionSource
@@ -275,6 +490,89 @@ public struct AccessPromptDecision: Codable, Hashable, Sendable {
     self.source = source
     self.rememberChoice = rememberChoice
     self.respondedAt = respondedAt
+  }
+
+  public static var supportsSecureCoding: Bool {
+    true
+  }
+
+  public override func isEqual(_ object: Any?) -> Bool {
+    guard let object = object as? AccessPromptDecision else {
+      return false
+    }
+
+    return requestID == object.requestID
+      && decision == object.decision
+      && source == object.source
+      && rememberChoice == object.rememberChoice
+      && respondedAt == object.respondedAt
+  }
+
+  public override var hash: Int {
+    var hasher = Hasher()
+    hasher.combine(requestID)
+    hasher.combine(decision)
+    hasher.combine(source)
+    hasher.combine(rememberChoice)
+    hasher.combine(respondedAt)
+    return hasher.finalize()
+  }
+
+  public required convenience init?(coder: NSCoder) {
+    guard
+      let requestID = coder.decodeObject(of: NSUUID.self, forKey: "requestID") as UUID?,
+      let decisionRawValue = coder.decodeObject(of: NSString.self, forKey: "decision") as String?,
+      let decision = AccessDecision(rawValue: decisionRawValue),
+      let sourceRawValue = coder.decodeObject(of: NSString.self, forKey: "source") as String?,
+      let source = DecisionSource(rawValue: sourceRawValue),
+      let respondedAt = coder.decodeObject(of: NSDate.self, forKey: "respondedAt") as Date?
+    else {
+      return nil
+    }
+
+    self.init(
+      requestID: requestID,
+      decision: decision,
+      source: source,
+      rememberChoice: coder.decodeBool(forKey: "rememberChoice"),
+      respondedAt: respondedAt
+    )
+  }
+
+  public func encode(with coder: NSCoder) {
+    coder.encode(requestID as NSUUID, forKey: "requestID")
+    coder.encode(decision.rawValue as NSString, forKey: "decision")
+    coder.encode(source.rawValue as NSString, forKey: "source")
+    coder.encode(rememberChoice, forKey: "rememberChoice")
+    coder.encode(respondedAt as NSDate, forKey: "respondedAt")
+  }
+
+  enum CodingKeys: String, CodingKey {
+    case requestID
+    case decision
+    case source
+    case rememberChoice
+    case respondedAt
+  }
+
+  public required convenience init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.init(
+      requestID: try container.decode(UUID.self, forKey: .requestID),
+      decision: try container.decode(AccessDecision.self, forKey: .decision),
+      source: try container.decode(DecisionSource.self, forKey: .source),
+      rememberChoice: try container.decode(Bool.self, forKey: .rememberChoice),
+      respondedAt: try container.decode(Date.self, forKey: .respondedAt)
+    )
+  }
+
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(requestID, forKey: .requestID)
+    try container.encode(decision, forKey: .decision)
+    try container.encode(source, forKey: .source)
+    try container.encode(rememberChoice, forKey: .rememberChoice)
+    try container.encode(respondedAt, forKey: .respondedAt)
   }
 }
 

@@ -1,9 +1,21 @@
 import Foundation
 import Observation
+import ServiceManagement
 
 @MainActor
 @Observable
 public final class AppRuntime {
+  public enum AgentLoginItemRegistrationState: Equatable, Sendable {
+    case notRegistered
+    case enabled
+    case requiresApproval
+    case notFound
+
+    var isEnabled: Bool {
+      self == .enabled
+    }
+  }
+
   public struct Configuration {
     public var userDefaults: UserDefaults
     public var homeDirectoryURL: URL
@@ -11,6 +23,10 @@ public final class AppRuntime {
     public var forcedPseudolocalization: Bool
     public var isUITesting: Bool
     public var sharedContainerPaths: SharedContainerPaths
+    public var ipcController: (any AppIPCControlling)?
+    public var agentLoginItemStatusProvider: () -> AgentLoginItemRegistrationState
+    public var registerAgentLoginItemAction: () throws -> Void
+    public var unregisterAgentLoginItemAction: () throws -> Void
 
     public init(
       userDefaults: UserDefaults,
@@ -18,7 +34,11 @@ public final class AppRuntime {
       forcedOnboardingCompleted: Bool?,
       forcedPseudolocalization: Bool = false,
       isUITesting: Bool = false,
-      sharedContainerPaths: SharedContainerPaths = .defaultRoot()
+      sharedContainerPaths: SharedContainerPaths = .defaultRoot(),
+      ipcController: (any AppIPCControlling)? = nil,
+      agentLoginItemStatusProvider: (() -> AgentLoginItemRegistrationState)? = nil,
+      registerAgentLoginItemAction: (() throws -> Void)? = nil,
+      unregisterAgentLoginItemAction: (() throws -> Void)? = nil
     ) {
       self.userDefaults = userDefaults
       self.homeDirectoryURL = homeDirectoryURL
@@ -26,6 +46,13 @@ public final class AppRuntime {
       self.forcedPseudolocalization = forcedPseudolocalization
       self.isUITesting = isUITesting
       self.sharedContainerPaths = sharedContainerPaths
+      self.ipcController = ipcController
+      self.agentLoginItemStatusProvider =
+        agentLoginItemStatusProvider ?? AppRuntime.currentAgentLoginItemRegistrationState
+      self.registerAgentLoginItemAction =
+        registerAgentLoginItemAction ?? AppRuntime.registerEmbeddedAgentLoginItem
+      self.unregisterAgentLoginItemAction =
+        unregisterAgentLoginItemAction ?? AppRuntime.unregisterEmbeddedAgentLoginItem
     }
 
     public static func live(
@@ -72,6 +99,33 @@ public final class AppRuntime {
         return nil
       }
     }
+  }
+
+  nonisolated static let embeddedAgentLaunchAgentPlistName = "com.nanzhipro.AegisAgent.plist"
+
+  nonisolated static func currentAgentLoginItemRegistrationState()
+    -> AgentLoginItemRegistrationState
+  {
+    switch SMAppService.agent(plistName: embeddedAgentLaunchAgentPlistName).status {
+    case .notRegistered:
+      return .notRegistered
+    case .enabled:
+      return .enabled
+    case .requiresApproval:
+      return .requiresApproval
+    case .notFound:
+      return .notFound
+    @unknown default:
+      return .notFound
+    }
+  }
+
+  nonisolated static func registerEmbeddedAgentLoginItem() throws {
+    try SMAppService.agent(plistName: embeddedAgentLaunchAgentPlistName).register()
+  }
+
+  nonisolated static func unregisterEmbeddedAgentLoginItem() throws {
+    try SMAppService.agent(plistName: embeddedAgentLaunchAgentPlistName).unregister()
   }
 
   public enum Screen: Equatable {
@@ -191,11 +245,14 @@ public final class AppRuntime {
 
   private let userDefaults: UserDefaults
   private let homeDirectoryURL: URL
-  private let ipcService: AegisIPCService
+  private let ipcController: any AppIPCControlling
   private let policyStoreFileStore: LocalPolicyStoreFileStore
   private let localPolicyStoreURL: URL
   private let isUITesting: Bool
   private let systemExtensionInstaller: SystemExtensionInstaller
+  private let agentLoginItemStatusProvider: () -> AgentLoginItemRegistrationState
+  private let registerAgentLoginItemAction: () throws -> Void
+  private let unregisterAgentLoginItemAction: () throws -> Void
 
   var selectedSidebarItem: SidebarItem = .overview
   var selectedOnboardingStep: OnboardingStep = .welcome
@@ -206,23 +263,30 @@ public final class AppRuntime {
   private(set) var ipcStatusSnapshot: IPCStatusSnapshot
   private(set) var isAgentLoginItemEnabled: Bool
   private(set) var systemExtensionInstallationState: SystemExtensionInstallationState = .idle
+  private(set) var lastExtensionDiagnostic: ExtensionDiagnosticEvent?
 
   private static let diagnosticDateFormatter = ISO8601DateFormatter()
 
   public init(configuration: Configuration = .live()) {
-    let loginItemEnabled = configuration.userDefaults.bool(forKey: Self.agentLoginItemEnabledKey)
+    let loginItemEnabled = configuration.agentLoginItemStatusProvider().isEnabled
     let policyStoreURL = configuration.sharedContainerPaths.policyStoreURL
+    let initialIPCStatusSnapshot = IPCStatusSnapshot.empty()
+    initialIPCStatusSnapshot.loginItemEnabled = loginItemEnabled
+    let resolvedIPCController = configuration.ipcController ?? AegisAppXPCController()
 
     self.userDefaults = configuration.userDefaults
     self.homeDirectoryURL = configuration.homeDirectoryURL
     self.isPseudolocalizationEnabled = configuration.forcedPseudolocalization
     self.isUITesting = configuration.isUITesting
-    self.ipcService = AegisIPCService(paths: configuration.sharedContainerPaths)
+    self.ipcController = resolvedIPCController
     self.policyStoreFileStore = LocalPolicyStoreFileStore(fileURL: policyStoreURL)
     self.localPolicyStoreURL = policyStoreURL
     self.isAgentLoginItemEnabled = loginItemEnabled
-    self.ipcStatusSnapshot = .empty()
+    self.ipcStatusSnapshot = initialIPCStatusSnapshot
     self.systemExtensionInstaller = SystemExtensionInstaller()
+    self.agentLoginItemStatusProvider = configuration.agentLoginItemStatusProvider
+    self.registerAgentLoginItemAction = configuration.registerAgentLoginItemAction
+    self.unregisterAgentLoginItemAction = configuration.unregisterAgentLoginItemAction
 
     let initialPolicyStore = LocalPolicyStore.defaultStore(
       homeDirectoryURL: configuration.homeDirectoryURL)
@@ -232,6 +296,18 @@ public final class AppRuntime {
     self.hasCompletedOnboarding =
       configuration.forcedOnboardingCompleted
       ?? configuration.userDefaults.bool(forKey: Self.onboardingCompletedKey)
+    self.lastExtensionDiagnostic = nil
+
+    self.ipcController.onStatusDidChange = { [weak self] snapshot in
+      Task { @MainActor [weak self] in
+        self?.receiveIPCStatusSnapshot(snapshot)
+      }
+    }
+    self.ipcController.onDiagnosticEvent = { [weak self] event in
+      Task { @MainActor [weak self] in
+        self?.lastExtensionDiagnostic = event
+      }
+    }
   }
 
   public var screen: Screen {
@@ -321,12 +397,12 @@ public final class AppRuntime {
       DiagnosticItem(
         id: "agent-state",
         titleKey: "aegis.settings.diagnostics.agent_state",
-        value: localizedLabel(for: ipcStatusSnapshot.agent.state)
+        value: diagnosticValue(for: ipcStatusSnapshot.agent)
       ),
       DiagnosticItem(
         id: "extension-state",
         titleKey: "aegis.readiness.system_extension.title",
-        value: localizedLabel(for: ipcStatusSnapshot.extensionService.state)
+        value: extensionDiagnosticValue
       ),
     ]
   }
@@ -334,6 +410,17 @@ public final class AppRuntime {
   func activate() async {
     if isUITesting {
       return
+    }
+
+    syncLoginItemRegistrationState()
+
+    do {
+      ipcStatusSnapshot = try await ipcController.activate()
+      syncLoginItemRegistrationState()
+      applyIPCStatusSnapshot()
+    } catch {
+      componentStatus.systemExtension = .init(
+        state: .needsAttention, detail: "aegis.readiness.system_extension.detail")
     }
 
     let fallbackPolicyStore = LocalPolicyStore.defaultStore(homeDirectoryURL: homeDirectoryURL)
@@ -349,7 +436,7 @@ public final class AppRuntime {
     if shouldPersistLoadedStore {
       do {
         try await policyStoreFileStore.save(policyStore)
-        ipcStatusSnapshot = try await ipcService.reloadPolicy()
+        ipcStatusSnapshot = try await ipcController.reloadPolicy()
       } catch {
         // Keep the in-memory store so the UI stays functional even if persistence fails.
       }
@@ -360,26 +447,28 @@ public final class AppRuntime {
   }
 
   func registerAgentLoginItem() async {
-    isAgentLoginItemEnabled = true
-    userDefaults.set(true, forKey: Self.agentLoginItemEnabledKey)
-
     do {
-      ipcStatusSnapshot = try await ipcService.setLoginItemEnabled(true)
+      try registerAgentLoginItemAction()
+      syncLoginItemRegistrationState()
+      userDefaults.set(isAgentLoginItemEnabled, forKey: Self.agentLoginItemEnabledKey)
+      ipcStatusSnapshot = try await ipcController.setLoginItemEnabled(isAgentLoginItemEnabled)
       applyIPCStatusSnapshot()
     } catch {
+      syncLoginItemRegistrationState()
       componentStatus.loginItem = .init(
         state: .needsAttention, detail: "aegis.readiness.login_item.detail")
     }
   }
 
   func unregisterAgentLoginItem() async {
-    isAgentLoginItemEnabled = false
-    userDefaults.set(false, forKey: Self.agentLoginItemEnabledKey)
-
     do {
-      ipcStatusSnapshot = try await ipcService.setLoginItemEnabled(false)
+      try unregisterAgentLoginItemAction()
+      syncLoginItemRegistrationState()
+      userDefaults.set(isAgentLoginItemEnabled, forKey: Self.agentLoginItemEnabledKey)
+      ipcStatusSnapshot = try await ipcController.setLoginItemEnabled(isAgentLoginItemEnabled)
       applyIPCStatusSnapshot()
     } catch {
+      syncLoginItemRegistrationState()
       componentStatus.loginItem = .init(
         state: .needsAttention, detail: "aegis.readiness.login_item.detail")
     }
@@ -387,9 +476,11 @@ public final class AppRuntime {
 
   func refreshCommunicationStatus() async {
     do {
-      ipcStatusSnapshot = try await ipcService.snapshot()
+      ipcStatusSnapshot = try await ipcController.snapshot()
+      syncLoginItemRegistrationState()
       applyIPCStatusSnapshot()
     } catch {
+      syncLoginItemRegistrationState()
       componentStatus.systemExtension = .init(
         state: .needsAttention, detail: "aegis.readiness.system_extension.detail")
     }
@@ -398,6 +489,12 @@ public final class AppRuntime {
   /// Requests activation of the embedded AegisExtension system extension. The UI observes
   /// `systemExtensionInstallationState` to reflect progress and failures.
   func installSystemExtension() {
+    if hasCompletedOnboarding {
+      selectedSidebarItem = .overview
+    } else {
+      selectedOnboardingStep = .permissions
+    }
+
     guard !isUITesting else { return }
     guard !systemExtensionInstallationState.isInProgress else { return }
 
@@ -414,6 +511,12 @@ public final class AppRuntime {
     }
   }
 
+  func overrideSystemExtensionInstallationStateForTesting(
+    _ state: SystemExtensionInstallationState
+  ) {
+    systemExtensionInstallationState = state
+  }
+
   var systemExtensionInstallActionKey: String {
     switch systemExtensionInstallationState {
     case .idle, .failed:
@@ -424,6 +527,47 @@ public final class AppRuntime {
       return "aegis.menu.install_extension.reboot"
     case .activated:
       return "aegis.menu.reinstall_extension"
+    }
+  }
+
+  var openOnboardingActionKey: String {
+    "aegis.menu.open_onboarding"
+  }
+
+  var systemExtensionInstallationStatusText: String {
+    switch systemExtensionInstallationState {
+    case .idle, .failed:
+      return String(localized: "aegis.readiness.system_extension.detail")
+    case .requesting, .awaitingUserApproval:
+      return String(localized: "aegis.menu.install_extension.pending")
+    case .willCompleteAfterReboot:
+      return String(localized: "aegis.menu.install_extension.reboot")
+    case .activated:
+      return String(localized: "aegis.readiness.system_extension.ready")
+    }
+  }
+
+  var systemExtensionInstallationFailureReason: String? {
+    guard case .failed(let reason) = systemExtensionInstallationState,
+      !reason.isEmpty,
+      reason != "aegis.system_extension.error.unknown_result"
+    else {
+      return nil
+    }
+
+    return reason
+  }
+
+  var systemExtensionInstallationFeedbackState: ComponentStatus.State {
+    switch systemExtensionInstallationState {
+    case .activated:
+      return .ready
+    case .failed, .awaitingUserApproval, .willCompleteAfterReboot:
+      return .needsAttention
+    case .requesting:
+      return .unknown
+    case .idle:
+      return componentStatus.systemExtension.state
     }
   }
 
@@ -595,6 +739,17 @@ public final class AppRuntime {
     )
   }
 
+  private func syncLoginItemRegistrationState() {
+    isAgentLoginItemEnabled = agentLoginItemStatusProvider().isEnabled
+    ipcStatusSnapshot.loginItemEnabled = isAgentLoginItemEnabled
+  }
+
+  private func receiveIPCStatusSnapshot(_ snapshot: IPCStatusSnapshot) {
+    ipcStatusSnapshot = snapshot
+    syncLoginItemRegistrationState()
+    applyIPCStatusSnapshot()
+  }
+
   private func persistPolicyStoreAndReload() async {
     do {
       try await policyStoreFileStore.save(policyStore)
@@ -603,7 +758,7 @@ public final class AppRuntime {
     }
 
     do {
-      ipcStatusSnapshot = try await ipcService.reloadPolicy()
+      ipcStatusSnapshot = try await ipcController.reloadPolicy()
     } catch {
       // Persisted changes still take effect locally even if the reload signal cannot be delivered.
     }
@@ -617,6 +772,41 @@ public final class AppRuntime {
     }
 
     return formattedDiagnosticDate(lastPolicyReloadAt)
+  }
+
+  private var extensionDiagnosticValue: String {
+    var components = [diagnosticValue(for: ipcStatusSnapshot.extensionService)]
+
+    if let lastExtensionDiagnostic {
+      components.append(lastExtensionDiagnosticSummary(lastExtensionDiagnostic))
+    }
+
+    return components.joined(separator: " | ")
+  }
+
+  private func diagnosticValue(for snapshot: IPCServiceEndpointSnapshot) -> String {
+    var components = [localizedLabel(for: snapshot.state)]
+
+    if let detail = snapshot.detail, !detail.isEmpty {
+      components.append(detail)
+    }
+
+    return components.joined(separator: " | ")
+  }
+
+  private func lastExtensionDiagnosticSummary(_ event: ExtensionDiagnosticEvent) -> String {
+    var components = [event.messageKey]
+
+    if let detail = event.metadata["detail"], !detail.isEmpty {
+      components.append(detail)
+    }
+
+    if let code = event.metadata["code"], !code.isEmpty {
+      components.append(code)
+    }
+
+    components.append(formattedDiagnosticDate(event.occurredAt))
+    return components.joined(separator: " | ")
   }
 
   private func localizedLabel(for state: IPCServiceState) -> String {

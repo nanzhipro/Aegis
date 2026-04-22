@@ -74,6 +74,8 @@ struct StatusOverviewView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
       }
 
+      SystemExtensionInstallationCard(runtime: runtime)
+
       HStack {
         Button(LocalizedStringKey(runtime.loginItemActionKey)) {
           Task {
@@ -303,6 +305,44 @@ struct ReadinessIndicatorRow: View {
       return .red
     case .unknown:
       return .secondary
+    }
+  }
+}
+
+struct SystemExtensionInstallationCard: View {
+  @Bindable var runtime: AppRuntime
+
+  var body: some View {
+    GroupBox {
+      VStack(alignment: .leading, spacing: 14) {
+        HStack(alignment: .top, spacing: 12) {
+          VStack(alignment: .leading, spacing: 4) {
+            Text("aegis.readiness.system_extension.title")
+              .font(.headline)
+            Text(verbatim: runtime.systemExtensionInstallationStatusText)
+              .font(.subheadline)
+              .foregroundStyle(.secondary)
+          }
+
+          Spacer()
+
+          StatusStateBadge(state: runtime.systemExtensionInstallationFeedbackState)
+        }
+
+        if let failureReason = runtime.systemExtensionInstallationFailureReason {
+          Text(verbatim: failureReason)
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .textSelection(.enabled)
+        }
+
+        Button(LocalizedStringKey(runtime.systemExtensionInstallActionKey)) {
+          runtime.installSystemExtension()
+        }
+        .accessibilityIdentifier("systemExtension.install")
+        .disabled(runtime.systemExtensionInstallationState.isInProgress)
+      }
+      .frame(maxWidth: .infinity, alignment: .leading)
     }
   }
 }

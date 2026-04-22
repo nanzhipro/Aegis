@@ -8,8 +8,7 @@ APP_SCHEME=${AEGIS_APP_SCHEME:-AegisApp}
 CONFIGURATION=${AEGIS_CONFIGURATION:-Release}
 ARCHIVE_PATH=${AEGIS_ARCHIVE_PATH:-"$BUILD_DIR/Aegis.xcarchive"}
 EXPORTED_APP_PATH=${AEGIS_EXPORTED_APP_PATH:-"$BUILD_DIR/AegisApp.app"}
-DMG_PATH=${AEGIS_DMG_PATH:-"$BUILD_DIR/AegisApp.dmg"}
-VOLUME_NAME=${AEGIS_VOLUME_NAME:-Aegis}
+ZIP_PATH=${AEGIS_ZIP_PATH:-"$BUILD_DIR/AegisApp.zip"}
 RELEASE_ENV_PATH=${AEGIS_RELEASE_ENV_PATH:-"$BUILD_DIR/release.env"}
 KEYCHAIN_PATH=${AEGIS_KEYCHAIN_PATH:-"$BUILD_DIR/aegis-signing.keychain-db"}
 CERTIFICATE_PATH=${AEGIS_CERTIFICATE_PATH:-"$BUILD_DIR/developer-id.p12"}
@@ -205,8 +204,7 @@ write_release_env() {
         printf 'export AEGIS_CONFIGURATION=%s\n' "$(quote_for_shell "$CONFIGURATION")"
         printf 'export AEGIS_ARCHIVE_PATH=%s\n' "$(quote_for_shell "$ARCHIVE_PATH")"
         printf 'export AEGIS_EXPORTED_APP_PATH=%s\n' "$(quote_for_shell "$EXPORTED_APP_PATH")"
-        printf 'export AEGIS_DMG_PATH=%s\n' "$(quote_for_shell "$DMG_PATH")"
-        printf 'export AEGIS_VOLUME_NAME=%s\n' "$(quote_for_shell "$VOLUME_NAME")"
+        printf 'export AEGIS_ZIP_PATH=%s\n' "$(quote_for_shell "$ZIP_PATH")"
         printf 'export AEGIS_KEYCHAIN_PATH=%s\n' "$(quote_for_shell "$KEYCHAIN_PATH")"
         printf 'export AEGIS_CERTIFICATE_PATH=%s\n' "$(quote_for_shell "$CERTIFICATE_PATH")"
         printf 'export AEGIS_NOTARY_KEY_PATH=%s\n' "$(quote_for_shell "$NOTARY_KEY_PATH")"
@@ -261,6 +259,6 @@ require_exported_app() {
     [ -d "$EXPORTED_APP_PATH" ] || fail "Exported app not found at $EXPORTED_APP_PATH"
 }
 
-require_dmg() {
-    [ -f "$DMG_PATH" ] || fail "DMG not found at $DMG_PATH"
+require_packaged_zip() {
+    [ -f "$ZIP_PATH" ] || fail "ZIP not found at $ZIP_PATH"
 }

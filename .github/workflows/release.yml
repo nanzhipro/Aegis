@@ -46,10 +46,10 @@ jobs:
       - name: Sign exported app
         run: ./scripts/sign.sh
 
-      - name: Package DMG
-        run: ./scripts/package-dmg.sh
+      - name: Package release ZIP
+        run: ./scripts/package-app.sh
 
-      - name: Notarize DMG
+      - name: Notarize release ZIP and staple app
         run: ./scripts/notarize.sh
 
       - name: Validate release artifacts
@@ -62,7 +62,7 @@ jobs:
           path: |
             build/release/Aegis.xcarchive
             build/release/AegisApp.app
-            build/release/AegisApp.dmg
+            build/release/AegisApp.zip
             build/release/notary-submit.json
           if-no-files-found: error
 
@@ -73,4 +73,4 @@ jobs:
         run: |
           gh release view "$AEGIS_RELEASE_TAG" >/dev/null 2>&1 || \
             gh release create "$AEGIS_RELEASE_TAG" --title "$AEGIS_RELEASE_TAG" --notes "Automated release for $AEGIS_RELEASE_TAG."
-          gh release upload "$AEGIS_RELEASE_TAG" build/release/AegisApp.dmg --clobber
+          gh release upload "$AEGIS_RELEASE_TAG" build/release/AegisApp.zip --clobber

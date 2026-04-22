@@ -6,13 +6,16 @@ import Observation
 final class AgentRuntime {
   struct Configuration {
     var sharedContainerPaths: SharedContainerPaths
+    var ipcController: (any AgentIPCControlling)?
     var now: @Sendable () -> Date
 
     init(
       sharedContainerPaths: SharedContainerPaths = .defaultRoot(),
+      ipcController: (any AgentIPCControlling)? = nil,
       now: @escaping @Sendable () -> Date = { Date() }
     ) {
       self.sharedContainerPaths = sharedContainerPaths
+      self.ipcController = ipcController
       self.now = now
     }
 
@@ -21,7 +24,7 @@ final class AgentRuntime {
     }
   }
 
-  private let service: AegisIPCService
+  private let ipcController: any AgentIPCControlling
   private let now: @Sendable () -> Date
 
   private(set) var statusSnapshot: IPCStatusSnapshot
@@ -30,11 +33,36 @@ final class AgentRuntime {
   private(set) var lastError: IPCTransportError?
   var rememberChoice = false
 
-  init(configuration: Configuration = .live(), service: AegisIPCService? = nil) {
-    let sharedService = service ?? AegisIPCService(paths: configuration.sharedContainerPaths)
-    self.service = sharedService
+  init(
+    configuration: Configuration = .live(),
+    service: AegisIPCService? = nil,
+    ipcController: (any AgentIPCControlling)? = nil
+  ) {
+    let resolvedIPCController =
+      ipcController
+      ?? configuration.ipcController
+      ?? service.map { FileBackedAgentIPCController(service: $0) }
+      ?? AegisAgentXPCController()
+    self.ipcController = resolvedIPCController
     self.now = configuration.now
     self.statusSnapshot = .empty(now: configuration.now())
+
+    self.ipcController.onPromptPresented = { [weak self] request in
+      Task { @MainActor [weak self] in
+        self?.handlePresentedPrompt(request)
+      }
+    }
+    self.ipcController.onPromptCancelled = { [weak self] requestID in
+      Task { @MainActor [weak self] in
+        self?.handleCancelledPrompt(requestID)
+      }
+    }
+    self.ipcController.onPolicyDidReload = { [weak self] snapshot in
+      Task { @MainActor [weak self] in
+        self?.statusSnapshot = snapshot
+        self?.lastError = nil
+      }
+    }
   }
 
   var agentStatusKey: String {
@@ -51,18 +79,13 @@ final class AgentRuntime {
   }
 
   var pendingPromptCount: Int {
-    statusSnapshot.pendingPromptCount + (currentRequest == nil ? 0 : 1)
+    max(statusSnapshot.pendingPromptCount, currentRequest == nil ? 0 : 1)
   }
 
   func activate() async {
     do {
-      statusSnapshot = try await service.publish(
-        endpoint: .agent, state: .ready, detail: "agent-ready", at: now())
+      statusSnapshot = try await ipcController.activate()
       lastError = nil
-      if currentRequest == nil {
-        currentRequest = try await service.claimNextPrompt(at: now())
-      }
-      statusSnapshot = try await service.snapshot()
     } catch let error as IPCTransportError {
       lastError = error
     } catch {
@@ -96,17 +119,32 @@ final class AgentRuntime {
     )
 
     do {
-      statusSnapshot = try await service.submitDecision(
-        resolvedDecision, for: currentRequest, at: now())
+      self.currentRequest = nil
+      statusSnapshot = try await ipcController.submitDecision(resolvedDecision, for: currentRequest)
       lastDecision = resolvedDecision
       lastError = nil
       rememberChoice = false
-      self.currentRequest = try await service.claimNextPrompt(at: now())
-      statusSnapshot = try await service.snapshot()
     } catch let error as IPCTransportError {
       lastError = error
     } catch {
       lastError = .storeFailure
     }
+  }
+
+  private func handlePresentedPrompt(_ request: AccessPromptRequest) {
+    currentRequest = request
+    statusSnapshot.pendingPromptCount = max(statusSnapshot.pendingPromptCount, 1)
+    statusSnapshot.update(endpoint: .agent, state: .busy, detail: "prompt-presenting", at: now())
+    lastError = nil
+  }
+
+  private func handleCancelledPrompt(_ requestID: UUID) {
+    guard currentRequest?.requestID == requestID else {
+      return
+    }
+
+    currentRequest = nil
+    statusSnapshot.pendingPromptCount = max(statusSnapshot.pendingPromptCount - 1, 0)
+    statusSnapshot.update(endpoint: .agent, state: .ready, detail: "agent-ready", at: now())
   }
 }

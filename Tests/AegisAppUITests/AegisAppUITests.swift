@@ -48,11 +48,11 @@ final class AegisAppUITests: XCTestCase {
   func testPseudolanguageLaunchesOnboardingContainer() {
     let app = launchApp(
       language: "en", forceOnboardingCompleted: false, forcePseudolocalization: true)
+    let pseudolanguageBanner = app.descendants(matching: .any).matching(
+      identifier: "pseudolanguage.banner"
+    ).firstMatch
 
-    XCTAssertTrue(
-      app.staticTexts[
-        "[!! Aegis pseudo-localization layout check with intentionally wide glyphs and extra padding !!]"
-      ].waitForExistence(timeout: 5))
+    XCTAssertTrue(pseudolanguageBanner.waitForExistence(timeout: 5))
   }
 
   @MainActor

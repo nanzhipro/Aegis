@@ -5,14 +5,39 @@ public enum AegisExtensionBootstrap {
 
   public struct Runtime: Sendable {
     public let authOpenHandler: AuthOpenEventHandler
+    private let activationCoordinator: ExtensionActivationCoordinator
 
-    public init(configuration: ExtensionDecisionEngine.Configuration = .live()) {
-      let decisionEngine = ExtensionDecisionEngine(configuration: configuration)
-      self.authOpenHandler = AuthOpenEventHandler(decisionEngine: decisionEngine)
+    public init(
+      configuration: ExtensionDecisionEngine.Configuration = .live(),
+      transport: (any ExtensionDecisionTransport)? = nil,
+      endpointSecurityClientFactory: ((AuthOpenEventHandler) -> any EndpointSecurityClient)? = nil
+    ) {
+      let resolvedTransport =
+        transport
+        ?? AegisExtensionXPCService(
+          listenerMode: .machService(name: AegisXPCContract.machServiceName()),
+          paths: configuration.sharedContainerPaths,
+          codeSigningRequirement: AegisXPCContract.clientCodeSigningRequirement()
+        )
+      let decisionEngine = ExtensionDecisionEngine(
+        configuration: configuration,
+        transport: resolvedTransport
+      )
+      let authOpenHandler = AuthOpenEventHandler(decisionEngine: decisionEngine)
+      let endpointSecurityClient =
+        endpointSecurityClientFactory?(authOpenHandler)
+        ?? LiveEndpointSecurityClient(authOpenHandler: authOpenHandler)
+
+      self.authOpenHandler = authOpenHandler
+      self.activationCoordinator = ExtensionActivationCoordinator(
+        transport: resolvedTransport,
+        authOpenHandler: authOpenHandler,
+        endpointSecurityClient: endpointSecurityClient
+      )
     }
 
     public func activate() async throws -> IPCStatusSnapshot {
-      try await authOpenHandler.activate()
+      try await activationCoordinator.activate()
     }
 
     public func handleAuthOpen(_ request: AccessPromptRequest) async -> AccessPromptDecision {

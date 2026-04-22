@@ -11,7 +11,7 @@
 - Host machine:
 - macOS version:
 - Execution environment:
-- DMG SHA256:
+- ZIP SHA256:
 
 ## Preconditions
 
@@ -21,7 +21,7 @@
 
 ## Manual Smoke Results
 
-- DMG download and mount:
+- ZIP download and extraction:
   - Result:
   - Evidence:
   - Notes:

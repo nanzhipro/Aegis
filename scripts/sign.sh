@@ -26,4 +26,9 @@ find "$EXPORTED_APP_PATH/Contents" \
 codesign_sign_path "$signing_identity" "$EXPORTED_APP_PATH"
 codesign --verify --deep --strict --verbose=2 "$EXPORTED_APP_PATH"
 
+if [ -f "$ZIP_PATH" ]; then
+    rm -f "$ZIP_PATH"
+    log "Removed stale release ZIP at $ZIP_PATH so packaging can rebuild it from the newly signed app"
+fi
+
 log "Signed release app with identity: $signing_identity"

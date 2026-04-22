@@ -5,15 +5,16 @@
 ## 环境确认
 
 - [ ] 当前机器是本地可完整测试的 macOS 14 及以上环境。
-- [ ] 已下载待验证的 `AegisApp.dmg`。
+- [ ] 已下载待验证的 `AegisApp.zip`。
 - [ ] 已准备本地生成的 `build/release/*-privileged-smoke.md` 或回退模板用于留痕。
 
 ## 安装与签名验证
 
-- [ ] `./scripts/validate-release.sh` 对下载得到的 `.app` 或 `.dmg` 通过。
-- [ ] `spctl -a -vv -t open` 验证 DMG 通过。
-- [ ] `xcrun stapler validate` 验证 DMG 通过。
-- [ ] 将 `AegisApp.app` 从 DMG 拖入 `/Applications`。
+- [ ] `./scripts/validate-release.sh` 对下载得到的 `.app` 或 `.zip` 通过。
+- [ ] 已从 `AegisApp.zip` 解压出 `AegisApp.app`。
+- [ ] `spctl --assess --type execute` 验证 `AegisApp.app` 通过。
+- [ ] `xcrun stapler validate` 验证 `AegisApp.app` 通过。
+- [ ] 将 `AegisApp.app` 拖入 `/Applications`。
 
 ## Onboarding 与系统授权
 
