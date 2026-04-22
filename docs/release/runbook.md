@@ -1,0 +1,155 @@
+# Aegis Release Runbook
+
+本 runbook 对应 phase-7 的“团队可以按文档完成一次完整 release”要求。自动化发布入口、人工特权 smoke、最终发布前检查必须按本文顺序执行。
+
+## 适用范围
+
+- 目标平台：受控 macOS 14 及以上环境
+- 自动化构建环境：GitHub Actions `macos-14`
+- 特权 smoke 环境：GitHub Actions self-hosted runner，标签为 `aegis-privileged`
+
+## 入口总览
+
+- 自动化测试入口：`./scripts/test.sh`
+- 发布环境预检查：`./scripts/bootstrap.sh`
+- 归档：`./scripts/archive.sh`
+- 签名：`./scripts/sign.sh`
+- 打包 DMG：`./scripts/package-dmg.sh`
+- 公证：`./scripts/notarize.sh`
+- 发布校验：`./scripts/validate-release.sh`
+- GitHub 托管发布流水线：`.github/workflows/release.yml`
+- 特权 smoke 流水线：`.github/workflows/privileged-smoke.yml`
+
+## 前置条件
+
+执行 release 前必须确认：
+
+- `main` 分支已包含目标提交。
+- `./scripts/test.sh` 在当前提交上通过。
+- GitHub Actions 发布所需 secrets 已在 GitHub 仓库中配置：
+  - `DEVELOPER_ID_P12_BASE64`
+  - `DEVELOPER_ID_P12_PASSWORD`
+  - `KEYCHAIN_PASSWORD`
+  - `APPLE_TEAM_ID`
+  - `APPLE_NOTARY_KEY_ID`
+  - `APPLE_NOTARY_ISSUER_ID`
+  - `APPLE_NOTARY_PRIVATE_KEY`
+- 受控 self-hosted runner 在线，标签包含 `self-hosted`、`macOS`、`aegis-privileged`。
+- 将要发布的 tag 已确定，例如 `v1.0.0`。
+
+本地或受信开发机预跑时，公证凭据支持两种来源：
+
+- 本地 Keychain profile：先执行 `xcrun notarytool store-credentials "notary-profile" ...`，再导出 `APPLE_NOTARY_KEYCHAIN_PROFILE=notary-profile` 或 `AEGIS_NOTARY_KEYCHAIN_PROFILE=notary-profile`。
+- App Store Connect API key：继续使用 `APPLE_TEAM_ID`、`APPLE_NOTARY_KEY_ID`、`APPLE_NOTARY_ISSUER_ID`、`APPLE_NOTARY_PRIVATE_KEY`。
+
+## 标准发布顺序
+
+### 1. 本地或受信开发机预跑
+
+按顺序执行：
+
+```sh
+./scripts/bootstrap.sh
+./scripts/test.sh
+./scripts/archive.sh
+./scripts/sign.sh
+./scripts/package-dmg.sh
+./scripts/validate-release.sh
+```
+
+如果当前环境具备 notary 凭据，再执行：
+
+```sh
+./scripts/notarize.sh
+./scripts/validate-release.sh
+```
+
+优先级规则如下：
+
+- 如果设置了 `APPLE_NOTARY_KEYCHAIN_PROFILE` 或 `AEGIS_NOTARY_KEYCHAIN_PROFILE`，`./scripts/notarize.sh` 会直接使用本地 Keychain 中已保存的 notarytool profile。
+- 如果没有设置 profile，脚本会回退到现有的 App Store Connect API key 流程。
+
+预跑目的不是代替 GitHub Release，而是尽早发现签名、公证、DMG 与验证脚本回归。
+
+### 2. 触发 GitHub Release
+
+二选一：
+
+- 推送 tag：`git tag vX.Y.Z && git push origin vX.Y.Z`
+- 手动触发 `.github/workflows/release.yml`，并填写 `release_tag`
+
+发布 workflow 的固定职责：
+
+1. 选择 Xcode 15.4。
+2. 运行 `./scripts/bootstrap.sh`。
+3. 运行 `./scripts/test.sh`。
+4. 归档、签名、打包 DMG、公证、发布校验。
+5. 上传 `Aegis.xcarchive`、`AegisApp.app`、`AegisApp.dmg` 与公证日志。
+6. 将 `AegisApp.dmg` 上传到对应 GitHub Release。
+
+### 3. 触发受控特权 smoke
+
+release 完成后，手动触发 `.github/workflows/privileged-smoke.yml`，输入刚发布的 tag。
+
+该 workflow 负责：
+
+1. 在受控 macOS 14 及以上 runner 下载 `AegisApp.dmg`。
+2. 解包并运行 `./scripts/validate-release.sh` 验证签名、stapler 与 Gatekeeper。
+3. 输出人工 smoke 提示。
+
+人工执行人必须同时打开：
+
+- `docs/release/privileged-smoke-checklist.md`
+- `docs/release/privileged-smoke-record-template.md`
+- `docs/release/readiness-checklist.md`
+
+### 4. 留痕并给出结论
+
+完成特权 smoke 后，必须把记录模板保存为具体记录文件，例如：
+
+- `docs/release/records/2026-04-21-v1.0.0-privileged-smoke.md`
+
+若在进入人工 smoke 前就发现前置条件不满足，也必须写入 blocker 记录，例如：
+
+- `docs/release/records/2026-04-21-v1.0.0-privileged-smoke-blocked.md`
+
+记录中至少包含：
+
+- 执行人
+- 时间
+- 受控主机版本
+- release tag
+- 每个 smoke 步骤的通过/失败结果
+- 失败项与处置
+- 最终结论：`Go`、`Go with caveats` 或 `No-Go`
+
+### 5. 发布判定
+
+只有同时满足以下条件，才能认定本次发布准备完成：
+
+- 自动化测试通过
+- release workflow 通过
+- 特权 smoke 有真实记录
+- 最终发布前检查清单全部勾完
+- 结论为 `Go`
+
+## 故障处理
+
+### release workflow 失败
+
+- 优先查看失败步骤对应的脚本输出。
+- 若失败发生在签名、公证或 DMG 验证，先在受信开发机复现对应脚本。
+- 未修复前不得重试 privileged smoke。
+
+### privileged smoke 失败
+
+- 记录失败步骤与截图。
+- 标记本次结果为 `No-Go`。
+- 修复后必须基于新的 release 产物重新执行 smoke，而不是对旧结论追加口头说明。
+
+### 当前环境不满足受控条件
+
+- 低于 macOS 14 的主机不能代替受控 runner 作为最终 smoke 结果。
+- 即使主机版本满足 macOS 14 及以上，也必须在受控 runner 或等效受控主机上形成真实 smoke 留痕。
+- 发现环境不满足时，必须立即写 blocker 记录，并把结论标记为 `No-Go`。
+- 没有真实 smoke 留痕时，phase-7 不能标记完成。

@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: macos-14
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 15.4
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+
+      - name: Bootstrap toolchain checks
+        run: ./scripts/bootstrap.sh
+
+      - name: Run automated test matrix
+        run: ./scripts/test.sh
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-test-logs
+          path: |
+            DerivedData/**/Logs/Test
+          if-no-files-found: ignore

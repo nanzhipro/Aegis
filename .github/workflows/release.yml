@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Release tag to create or update when not running from a tag push.
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    env:
+      AEGIS_RELEASE_TAG: ${{ github.ref_type == 'tag' && github.ref_name || inputs.release_tag }}
+      DEVELOPER_ID_P12_BASE64: ${{ secrets.DEVELOPER_ID_P12_BASE64 }}
+      DEVELOPER_ID_P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+      KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_NOTARY_KEY_ID: ${{ secrets.APPLE_NOTARY_KEY_ID }}
+      APPLE_NOTARY_ISSUER_ID: ${{ secrets.APPLE_NOTARY_ISSUER_ID }}
+      APPLE_NOTARY_PRIVATE_KEY: ${{ secrets.APPLE_NOTARY_PRIVATE_KEY }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 15.4
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+
+      - name: Bootstrap release environment
+        run: ./scripts/bootstrap.sh
+
+      - name: Run automated test matrix
+        run: ./scripts/test.sh
+
+      - name: Archive app bundle
+        run: ./scripts/archive.sh
+
+      - name: Sign exported app
+        run: ./scripts/sign.sh
+
+      - name: Package DMG
+        run: ./scripts/package-dmg.sh
+
+      - name: Notarize DMG
+        run: ./scripts/notarize.sh
+
+      - name: Validate release artifacts
+        run: ./scripts/validate-release.sh
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: aegis-release-artifacts
+          path: |
+            build/release/Aegis.xcarchive
+            build/release/AegisApp.app
+            build/release/AegisApp.dmg
+            build/release/notary-submit.json
+          if-no-files-found: error
+
+      - name: Publish GitHub release
+        if: env.AEGIS_RELEASE_TAG != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view "$AEGIS_RELEASE_TAG" >/dev/null 2>&1 || \
+            gh release create "$AEGIS_RELEASE_TAG" --title "$AEGIS_RELEASE_TAG" --notes "Automated release for $AEGIS_RELEASE_TAG."
+          gh release upload "$AEGIS_RELEASE_TAG" build/release/AegisApp.dmg --clobber

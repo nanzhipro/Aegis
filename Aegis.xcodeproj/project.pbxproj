@@ -1,0 +1,1107 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* AegisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* AegisApp.swift */; };
+		A10000000000000000000002 /* StatusOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* StatusOverviewView.swift */; };
+		A10000000000000000000003 /* AppRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* AppRuntime.swift */; };
+		A10000000000000000000004 /* AegisAgentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* AegisAgentApp.swift */; };
+		A10000000000000000000005 /* PromptCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* PromptCenterView.swift */; };
+		A10000000000000000000006 /* AgentRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* AgentRuntime.swift */; };
+		A10000000000000000000007 /* AegisExtensionBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* AegisExtensionBootstrap.swift */; };
+		A10000000000000000000008 /* AegisSharedBoundary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* AegisSharedBoundary.swift */; };
+		A10000000000000000000009 /* AegisSharedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000C /* AegisSharedTests.swift */; };
+		A1000000000000000000000A /* AegisAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000D /* AegisAppTests.swift */; };
+		A1000000000000000000000B /* AegisExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* AegisExtensionTests.swift */; };
+		A1000000000000000000000C /* AegisAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000F /* AegisAppUITests.swift */; };
+		A1000000000000000000000D /* ReleaseValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* ReleaseValidationTests.swift */; };
+		A1000000000000000000000E /* AegisSharedDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* AegisSharedDomain.swift */; };
+		A1000000000000000000000F /* AegisSharedDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* AegisSharedDomain.swift */; };
+		A10000000000000000000010 /* OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* OnboardingFlowView.swift */; };
+		A10000000000000000000011 /* AegisSharedDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* AegisSharedDomain.swift */; };
+		A10000000000000000000012 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* Localizable.xcstrings */; };
+		A10000000000000000000013 /* AppRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* AppRuntime.swift */; };
+		A10000000000000000000014 /* AegisSharedDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* AegisSharedDomain.swift */; };
+		A10000000000000000000015 /* AegisIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* AegisIPC.swift */; };
+		A10000000000000000000016 /* AegisIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* AegisIPC.swift */; };
+		A10000000000000000000017 /* AegisIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* AegisIPC.swift */; };
+		A10000000000000000000018 /* AegisSharedDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* AegisSharedDomain.swift */; };
+		A10000000000000000000019 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000016 /* Localizable.xcstrings */; };
+		A1000000000000000000001A /* AegisIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* AegisIPC.swift */; };
+		A1000000000000000000001B /* AegisSharedDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* AegisSharedDomain.swift */; };
+		A1000000000000000000001C /* AegisIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* AegisIPC.swift */; };
+		A1000000000000000000001D /* ExtensionIPCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* ExtensionIPCBridge.swift */; };
+		A1000000000000000000001E /* AgentRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* AgentRuntime.swift */; };
+		A1000000000000000000001F /* ExtensionIPCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* ExtensionIPCBridge.swift */; };
+		A10000000000000000000020 /* AuthOpenEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000017 /* AuthOpenEventHandler.swift */; };
+		A10000000000000000000021 /* TrustedProcessPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000018 /* TrustedProcessPolicy.swift */; };
+		A10000000000000000000022 /* ExtensionDecisionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000019 /* ExtensionDecisionEngine.swift */; };
+		A10000000000000000000023 /* AegisSharedDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* AegisSharedDomain.swift */; };
+		A10000000000000000000024 /* AegisIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* AegisIPC.swift */; };
+		A10000000000000000000025 /* AuthOpenEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000017 /* AuthOpenEventHandler.swift */; };
+		A10000000000000000000026 /* TrustedProcessPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000018 /* TrustedProcessPolicy.swift */; };
+		A10000000000000000000027 /* ExtensionDecisionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000019 /* ExtensionDecisionEngine.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000000000000000000001 /* AegisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* StatusOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusOverviewView.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* AppRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRuntime.swift; sourceTree = "<group>"; };
+		A20000000000000000000004 /* AegisApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AegisApp.entitlements; sourceTree = "<group>"; };
+		A20000000000000000000005 /* AegisAgentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisAgentApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000006 /* PromptCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptCenterView.swift; sourceTree = "<group>"; };
+		A20000000000000000000007 /* AgentRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentRuntime.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* AegisAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AegisAgent.entitlements; sourceTree = "<group>"; };
+		A20000000000000000000009 /* AegisExtensionBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisExtensionBootstrap.swift; sourceTree = "<group>"; };
+		A2000000000000000000000A /* AegisExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AegisExtension.entitlements; sourceTree = "<group>"; };
+		A2000000000000000000000B /* AegisSharedBoundary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisSharedBoundary.swift; sourceTree = "<group>"; };
+		A2000000000000000000000C /* AegisSharedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisSharedTests.swift; sourceTree = "<group>"; };
+		A2000000000000000000000D /* AegisAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisAppTests.swift; sourceTree = "<group>"; };
+		A2000000000000000000000E /* AegisExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisExtensionTests.swift; sourceTree = "<group>"; };
+		A2000000000000000000000F /* AegisAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisAppUITests.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* ReleaseValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseValidationTests.swift; sourceTree = "<group>"; };
+		A20000000000000000000011 /* AegisSharedDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisSharedDomain.swift; sourceTree = "<group>"; };
+		A20000000000000000000012 /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
+		A20000000000000000000013 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A20000000000000000000014 /* AegisIPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisIPC.swift; sourceTree = "<group>"; };
+		A20000000000000000000015 /* ExtensionIPCBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionIPCBridge.swift; sourceTree = "<group>"; };
+		A20000000000000000000016 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A20000000000000000000017 /* AuthOpenEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthOpenEventHandler.swift; sourceTree = "<group>"; };
+		A20000000000000000000018 /* TrustedProcessPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustedProcessPolicy.swift; sourceTree = "<group>"; };
+		A20000000000000000000019 /* ExtensionDecisionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDecisionEngine.swift; sourceTree = "<group>"; };
+		A30000000000000000000001 /* AegisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AegisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000000000000000000002 /* AegisAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AegisAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000000000000000000003 /* AegisExtension.systemextension */ = {isa = PBXFileReference; explicitFileType = wrapper.systemextension; includeInIndex = 0; path = AegisExtension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000000000000000000004 /* AegisShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AegisShared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000000000000000000005 /* AegisSharedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AegisSharedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000000000000000000006 /* AegisAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AegisAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000000000000000000007 /* AegisExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AegisExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000000000000000000008 /* AegisAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AegisAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000000000000000000009 /* ReleaseValidationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReleaseValidationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A61000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61000000000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61000000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61000000000000000000004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61000000000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61000000000000000000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61000000000000000000007 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61000000000000000000008 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61000000000000000000009 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A40000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000003 /* AegisApp */,
+				A4000000000000000000000A /* AegisAgent */,
+				A4000000000000000000000F /* AegisExtension */,
+				A40000000000000000000015 /* AegisShared */,
+				A4000000000000000000001A /* Tests */,
+				A40000000000000000000002 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A40000000000000000000002 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A30000000000000000000001 /* AegisApp.app */,
+				A30000000000000000000002 /* AegisAgent.app */,
+				A30000000000000000000003 /* AegisExtension.systemextension */,
+				A30000000000000000000004 /* AegisShared.framework */,
+				A30000000000000000000005 /* AegisSharedTests.xctest */,
+				A30000000000000000000006 /* AegisAppTests.xctest */,
+				A30000000000000000000007 /* AegisExtensionTests.xctest */,
+				A30000000000000000000008 /* AegisAppUITests.xctest */,
+				A30000000000000000000009 /* ReleaseValidationTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000003 /* AegisApp */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000004 /* App */,
+				A40000000000000000000005 /* Onboarding */,
+				A40000000000000000000006 /* Settings */,
+				A40000000000000000000007 /* Status */,
+				A40000000000000000000008 /* Services */,
+				A40000000000000000000009 /* Resources */,
+				A20000000000000000000004 /* AegisApp.entitlements */,
+			);
+			path = AegisApp;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000004 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000001 /* AegisApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000005 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000012 /* OnboardingFlowView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000006 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000007 /* Status */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000002 /* StatusOverviewView.swift */,
+			);
+			path = Status;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000008 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000003 /* AppRuntime.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000009 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000013 /* Localizable.xcstrings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000A /* AegisAgent */ = {
+			isa = PBXGroup;
+			children = (
+				A4000000000000000000000B /* App */,
+				A4000000000000000000000C /* Prompt */,
+				A4000000000000000000000D /* Services */,
+				A4000000000000000000000E /* Resources */,
+				A20000000000000000000008 /* AegisAgent.entitlements */,
+			);
+			path = AegisAgent;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000B /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000005 /* AegisAgentApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000C /* Prompt */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000006 /* PromptCenterView.swift */,
+			);
+			path = Prompt;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000007 /* AgentRuntime.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000016 /* Localizable.xcstrings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000F /* AegisExtension */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000010 /* Bootstrap */,
+				A40000000000000000000011 /* EndpointSecurity */,
+				A40000000000000000000012 /* Policy */,
+				A40000000000000000000013 /* IPC */,
+				A40000000000000000000014 /* Resources */,
+				A2000000000000000000000A /* AegisExtension.entitlements */,
+			);
+			path = AegisExtension;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000010 /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000009 /* AegisExtensionBootstrap.swift */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000011 /* EndpointSecurity */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000017 /* AuthOpenEventHandler.swift */,
+			);
+			path = EndpointSecurity;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000012 /* Policy */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000018 /* TrustedProcessPolicy.swift */,
+				A20000000000000000000019 /* ExtensionDecisionEngine.swift */,
+			);
+			path = Policy;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000013 /* IPC */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000015 /* ExtensionIPCBridge.swift */,
+			);
+			path = IPC;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000014 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000015 /* AegisShared */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000016 /* Models */,
+				A40000000000000000000017 /* Persistence */,
+				A40000000000000000000018 /* IPC */,
+				A40000000000000000000019 /* Utilities */,
+			);
+			path = AegisShared;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000016 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000011 /* AegisSharedDomain.swift */,
+				A2000000000000000000000B /* AegisSharedBoundary.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000017 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000018 /* IPC */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000014 /* AegisIPC.swift */,
+			);
+			path = IPC;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000019 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000001A /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A4000000000000000000001B /* AegisSharedTests */,
+				A4000000000000000000001C /* AegisAppTests */,
+				A4000000000000000000001D /* AegisExtensionTests */,
+				A4000000000000000000001E /* AegisAppUITests */,
+				A4000000000000000000001F /* ReleaseValidationTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000001B /* AegisSharedTests */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000C /* AegisSharedTests.swift */,
+			);
+			path = AegisSharedTests;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000001C /* AegisAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000D /* AegisAppTests.swift */,
+			);
+			path = AegisAppTests;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000001D /* AegisExtensionTests */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000E /* AegisExtensionTests.swift */,
+			);
+			path = AegisExtensionTests;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000001E /* AegisAppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000F /* AegisAppUITests.swift */,
+			);
+			path = AegisAppUITests;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000001F /* ReleaseValidationTests */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000010 /* ReleaseValidationTests.swift */,
+			);
+			path = ReleaseValidationTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000000000000000000001 /* AegisApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000002 /* Build configuration list for PBXNativeTarget "AegisApp" */;
+			buildPhases = (
+				A61000000000000000000001 /* Frameworks */,
+				A60000000000000000000001 /* Sources */,
+				A62000000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AegisApp;
+			productName = AegisApp;
+			productReference = A30000000000000000000001 /* AegisApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A50000000000000000000002 /* AegisAgent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000003 /* Build configuration list for PBXNativeTarget "AegisAgent" */;
+			buildPhases = (
+				A61000000000000000000002 /* Frameworks */,
+				A60000000000000000000002 /* Sources */,
+				A62000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AegisAgent;
+			productName = AegisAgent;
+			productReference = A30000000000000000000002 /* AegisAgent.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A50000000000000000000003 /* AegisExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000004 /* Build configuration list for PBXNativeTarget "AegisExtension" */;
+			buildPhases = (
+				A61000000000000000000003 /* Frameworks */,
+				A60000000000000000000003 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AegisExtension;
+			productName = AegisExtension;
+			productReference = A30000000000000000000003 /* AegisExtension.systemextension */;
+			productType = "com.apple.product-type.system-extension";
+		};
+		A50000000000000000000004 /* AegisShared */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000005 /* Build configuration list for PBXNativeTarget "AegisShared" */;
+			buildPhases = (
+				A61000000000000000000004 /* Frameworks */,
+				A60000000000000000000004 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AegisShared;
+			productName = AegisShared;
+			productReference = A30000000000000000000004 /* AegisShared.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		A50000000000000000000005 /* AegisSharedTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000006 /* Build configuration list for PBXNativeTarget "AegisSharedTests" */;
+			buildPhases = (
+				A61000000000000000000005 /* Frameworks */,
+				A60000000000000000000005 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AegisSharedTests;
+			productName = AegisSharedTests;
+			productReference = A30000000000000000000005 /* AegisSharedTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A50000000000000000000006 /* AegisAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000007 /* Build configuration list for PBXNativeTarget "AegisAppTests" */;
+			buildPhases = (
+				A61000000000000000000006 /* Frameworks */,
+				A60000000000000000000006 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AegisAppTests;
+			productName = AegisAppTests;
+			productReference = A30000000000000000000006 /* AegisAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A50000000000000000000007 /* AegisExtensionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000008 /* Build configuration list for PBXNativeTarget "AegisExtensionTests" */;
+			buildPhases = (
+				A61000000000000000000007 /* Frameworks */,
+				A60000000000000000000007 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AegisExtensionTests;
+			productName = AegisExtensionTests;
+			productReference = A30000000000000000000007 /* AegisExtensionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A50000000000000000000008 /* AegisAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000009 /* Build configuration list for PBXNativeTarget "AegisAppUITests" */;
+			buildPhases = (
+				A61000000000000000000008 /* Frameworks */,
+				A60000000000000000000008 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AegisAppUITests;
+			productName = AegisAppUITests;
+			productReference = A30000000000000000000008 /* AegisAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		A50000000000000000000009 /* ReleaseValidationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A8000000000000000000000A /* Build configuration list for PBXNativeTarget "ReleaseValidationTests" */;
+			buildPhases = (
+				A61000000000000000000009 /* Frameworks */,
+				A60000000000000000000009 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReleaseValidationTests;
+			productName = ReleaseValidationTests;
+			productReference = A30000000000000000000009 /* ReleaseValidationTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A90000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+			};
+			buildConfigurationList = A80000000000000000000001 /* Build configuration list for PBXProject "Aegis" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				ja,
+				"zh-Hans",
+			);
+			mainGroup = A40000000000000000000001;
+			productRefGroup = A40000000000000000000002 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000000000000000000001 /* AegisApp */,
+				A50000000000000000000002 /* AegisAgent */,
+				A50000000000000000000003 /* AegisExtension */,
+				A50000000000000000000004 /* AegisShared */,
+				A50000000000000000000005 /* AegisSharedTests */,
+				A50000000000000000000006 /* AegisAppTests */,
+				A50000000000000000000007 /* AegisExtensionTests */,
+				A50000000000000000000008 /* AegisAppUITests */,
+				A50000000000000000000009 /* ReleaseValidationTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A60000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* AegisApp.swift in Sources */,
+				A10000000000000000000016 /* AegisIPC.swift in Sources */,
+				A10000000000000000000002 /* StatusOverviewView.swift in Sources */,
+				A10000000000000000000003 /* AppRuntime.swift in Sources */,
+				A10000000000000000000010 /* OnboardingFlowView.swift in Sources */,
+				A10000000000000000000011 /* AegisSharedDomain.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A60000000000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000004 /* AegisAgentApp.swift in Sources */,
+				A10000000000000000000017 /* AegisIPC.swift in Sources */,
+				A10000000000000000000005 /* PromptCenterView.swift in Sources */,
+				A10000000000000000000006 /* AgentRuntime.swift in Sources */,
+				A10000000000000000000018 /* AegisSharedDomain.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A60000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000007 /* AegisExtensionBootstrap.swift in Sources */,
+				A1000000000000000000001F /* ExtensionIPCBridge.swift in Sources */,
+				A10000000000000000000020 /* AuthOpenEventHandler.swift in Sources */,
+				A10000000000000000000021 /* TrustedProcessPolicy.swift in Sources */,
+				A10000000000000000000022 /* ExtensionDecisionEngine.swift in Sources */,
+				A10000000000000000000023 /* AegisSharedDomain.swift in Sources */,
+				A10000000000000000000024 /* AegisIPC.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A60000000000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000015 /* AegisIPC.swift in Sources */,
+				A1000000000000000000000E /* AegisSharedDomain.swift in Sources */,
+				A10000000000000000000008 /* AegisSharedBoundary.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A60000000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000000000000000000000F /* AegisSharedDomain.swift in Sources */,
+				A10000000000000000000009 /* AegisSharedTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A60000000000000000000006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000000000000000000001A /* AegisIPC.swift in Sources */,
+				A10000000000000000000013 /* AppRuntime.swift in Sources */,
+				A10000000000000000000014 /* AegisSharedDomain.swift in Sources */,
+				A1000000000000000000000A /* AegisAppTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A60000000000000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000000000000000000001E /* AgentRuntime.swift in Sources */,
+				A1000000000000000000001B /* AegisSharedDomain.swift in Sources */,
+				A1000000000000000000001C /* AegisIPC.swift in Sources */,
+				A1000000000000000000001D /* ExtensionIPCBridge.swift in Sources */,
+				A10000000000000000000025 /* AuthOpenEventHandler.swift in Sources */,
+				A10000000000000000000026 /* TrustedProcessPolicy.swift in Sources */,
+				A10000000000000000000027 /* ExtensionDecisionEngine.swift in Sources */,
+				A1000000000000000000000B /* AegisExtensionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A60000000000000000000008 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000000000000000000000C /* AegisAppUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A60000000000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000000000000000000000D /* ReleaseValidationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A62000000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000012 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A62000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000019 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A70000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A70000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A70000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AegisApp/AegisApp.entitlements;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A70000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AegisApp/AegisApp.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A70000000000000000000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AegisAgent/AegisAgent.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisAgent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A70000000000000000000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AegisAgent/AegisAgent.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisAgent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A70000000000000000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AegisExtension/AegisExtension.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A70000000000000000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AegisExtension/AegisExtension.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A70000000000000000000009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisShared;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A7000000000000000000000A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisShared;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A7000000000000000000000B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisSharedTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A7000000000000000000000C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisSharedTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A7000000000000000000000D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A7000000000000000000000E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A7000000000000000000000F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A70000000000000000000010 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A70000000000000000000011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = AegisApp;
+			};
+			name = Debug;
+		};
+		A70000000000000000000012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = AegisApp;
+			};
+			name = Release;
+		};
+		A70000000000000000000013 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.ReleaseValidationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A70000000000000000000014 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.ReleaseValidationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A80000000000000000000001 /* Build configuration list for PBXProject "Aegis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000001 /* Debug */,
+				A70000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000000000002 /* Build configuration list for PBXNativeTarget "AegisApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000003 /* Debug */,
+				A70000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000000000003 /* Build configuration list for PBXNativeTarget "AegisAgent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000005 /* Debug */,
+				A70000000000000000000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000000000004 /* Build configuration list for PBXNativeTarget "AegisExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000007 /* Debug */,
+				A70000000000000000000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000000000005 /* Build configuration list for PBXNativeTarget "AegisShared" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000009 /* Debug */,
+				A7000000000000000000000A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000000000006 /* Build configuration list for PBXNativeTarget "AegisSharedTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7000000000000000000000B /* Debug */,
+				A7000000000000000000000C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A80000000000000000000007 /* Build configuration list for PBXNativeTarget "AegisAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7000000000000000000000D /* Debug */,
+				A7000000000000000000000E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A80000000000000000000008 /* Build configuration list for PBXNativeTarget "AegisExtensionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7000000000000000000000F /* Debug */,
+				A70000000000000000000010 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A80000000000000000000009 /* Build configuration list for PBXNativeTarget "AegisAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000011 /* Debug */,
+				A70000000000000000000012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A8000000000000000000000A /* Build configuration list for PBXNativeTarget "ReleaseValidationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000013 /* Debug */,
+				A70000000000000000000014 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A90000000000000000000001 /* Project object */;
+}

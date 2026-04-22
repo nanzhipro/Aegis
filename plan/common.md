@@ -4,7 +4,7 @@
 
 ## 结论
 
-Aegis 不是迁移项目，而是一个面向 `macOS 15.0+` 的全新原生产品。现有仓库中的实验性代码只能作为参考，不构成兼容目标，也不作为架构包袱继承。
+Aegis 不是迁移项目，而是一个面向 `macOS 14.5+` 的全新原生产品。现有仓库中的实验性代码只能作为参考，不构成兼容目标，也不作为架构包袱继承。
 
 本规划将以下要求视为硬约束，而不是“后续优化项”：
 
@@ -39,15 +39,16 @@ v1 明确不做以下能力：
 - WebView / H5 审批界面
 - 第三方 UI 组件库
 - 第三方构建系统
-- `macOS 15` 以下版本兼容
+- `macOS 14.5` 以下版本兼容
 
 ## 硬性工程约束
 
 ### 平台与工具链
 
-- 最低系统版本：`macOS 15.0`
-- 开发工具：`Xcode 16+`
-- 语言：`Swift 6`
+- 最低系统版本：`macOS 14.5`
+- 开发工具：`Xcode 15.4+`
+- 语言：`Swift 5.10`
+- 默认 SDK：`macOS 14.5`
 - UI：`SwiftUI`
 - 并发：`Swift Concurrency`
 - 状态管理：`Observation`
@@ -769,7 +770,7 @@ func queryStatus() async throws -> ComponentStatus
 - GitHub 托管 runner 上无法完整自动化真实的 `System Extension` 用户批准和 `Full Disk Access` 人工授权流程
 - 这些流程必须设计为：
   - 自动化可验证部分
-  - 受控 macOS 15 机器上的特权 smoke 测试
+  - 受控 macOS 14.5 机器上的特权 smoke 测试
 
 因此，“测试全部通过”的定义应包含两部分：
 
@@ -780,7 +781,7 @@ func queryStatus() async throws -> ComponentStatus
 
 - PR：必须通过全部自动化测试
 - Tag Release：必须通过全部自动化测试和发布验证
-- 正式发布前：必须在受控 macOS 15 机器完成特权 smoke 测试
+- 正式发布前：必须在受控 macOS 14.5 机器完成特权 smoke 测试
 
 ### 固定测试入口
 
@@ -869,7 +870,7 @@ xcrun stapler validate "Aegis.dmg"
 
 推荐采用双层 GitHub CI：
 
-- GitHub 托管 `macos-15` runner
+- GitHub 托管 `macos-14` runner
   - 构建
   - 单元测试
   - UI 测试
@@ -877,7 +878,7 @@ xcrun stapler validate "Aegis.dmg"
   - 签名
   - 公证
   - 产物校验
-- 受控 self-hosted macOS 15 runner
+- 受控 self-hosted macOS 14.5 runner
   - 特权 smoke 测试
   - 安装和引导链路验证
 
@@ -897,7 +898,7 @@ xcrun stapler validate "Aegis.dmg"
 - 构建
 - 运行全部自动化测试
 - 上传测试报告和中间 artifact
-- 禁止使用 `macos-latest`，固定 pin 到 `macos-15`
+- 禁止使用 `macos-latest`，固定 pin 到 `macos-14`
 
 #### `release.yml`
 
@@ -927,7 +928,7 @@ xcrun stapler validate "Aegis.dmg"
 
 职责：
 
-- 在受控 macOS 15 机器安装产物
+- 在受控 macOS 14.5 机器安装产物
 - 验证 onboarding
 - 验证 System Extension 安装流
 - 验证 Agent 可达

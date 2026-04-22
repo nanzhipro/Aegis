@@ -1,0 +1,2122 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "aegis.app.title" : {
+      "comment" : "Main application title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis"
+          }
+        }
+      }
+    },
+    "aegis.dashboard.reopen_onboarding" : {
+      "comment" : "Button title for opening onboarding again from the dashboard.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review Setup Again"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セットアップを再確認"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再次查看设置"
+          }
+        }
+      }
+    },
+    "aegis.dashboard.disable_login_item" : {
+      "comment" : "Button title for disabling the agent login item registration.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disable Login Item"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Item を無効化"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停用 Login Item"
+          }
+        }
+      }
+    },
+    "aegis.dashboard.enable_login_item" : {
+      "comment" : "Button title for enabling the agent login item registration.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Login Item"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Item を有効化"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用 Login Item"
+          }
+        }
+      }
+    },
+    "aegis.dashboard.refresh_communication" : {
+      "comment" : "Button title for refreshing the shared IPC status snapshot.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh Communication"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通信状態を更新"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新通信状态"
+          }
+        }
+      }
+    },
+    "aegis.dashboard.subtitle" : {
+      "comment" : "Subtitle describing the dashboard purpose.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check the local protection state and continue setup when you are ready."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ここでローカル保護の状態を確認し、準備ができたら設定を続行します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在这里查看本地保护状态，并在准备好后继续完成设置。"
+          }
+        }
+      }
+    },
+    "aegis.dashboard.title" : {
+      "comment" : "Title for the main status dashboard.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status Overview"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "状態概要"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "状态总览"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.back" : {
+      "comment" : "Button title for moving to the previous onboarding step.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "戻る"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上一步"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.continue" : {
+      "comment" : "Primary button title for advancing the onboarding flow.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "続ける"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.finish_later" : {
+      "comment" : "Secondary button title for leaving onboarding and opening the dashboard later.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish Later"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あとで完了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍后完成"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.open_dashboard" : {
+      "comment" : "Primary button title on the last onboarding step.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Dashboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ダッシュボードを開く"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开主界面"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.permissions.body" : {
+      "comment" : "Description for the readiness and permissions onboarding step.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis needs a system extension, a login item, and local policy defaults before folder protection is fully active."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォルダ保護を有効にするには、System Extension、Login Item、ローカルポリシーの初期値が必要です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在文件夹保护真正生效前，Aegis 需要 System Extension、Login Item 和本地策略默认值就位。"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.permissions.footer" : {
+      "comment" : "Footer note for the permissions onboarding step.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Disk Access still requires manual approval in System Settings."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Disk Access は引き続きシステム設定で手動承認が必要です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Disk Access 仍需要你在系统设置中手动授权。"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.permissions.title" : {
+      "comment" : "Title for the readiness and permissions onboarding step.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review system readiness"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システムの準備状況を確認"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查系统就绪状态"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.progress" : {
+      "comment" : "Caption label shown beside the onboarding step counter.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手順"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "步骤"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.sidebar.title" : {
+      "comment" : "Sidebar title for the onboarding flow.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setup"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セットアップ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.welcome.body" : {
+      "comment" : "Description for the onboarding welcome step.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis stays local on this Mac and guides the first setup steps before protection turns on."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis はこの Mac 上だけで動作し、保護を有効にする前に初回設定を案内します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis 仅在这台 Mac 本地运行，并在真正开启保护前引导你完成首次设置。"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.welcome.languages" : {
+      "comment" : "Bullet point describing the supported languages.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English, Simplified Chinese, and Japanese are available from day one."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "英語、簡体字中国語、日本語を初日から利用できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "首发内置英文、简体中文和日文。"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.welcome.local_only" : {
+      "comment" : "Bullet point describing the local-only policy model.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Policies and decisions stay in a local shared container."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ポリシーと判断結果はローカル共有コンテナだけに保存されます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "策略与决策只保存在本地共享容器中。"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.welcome.no_network" : {
+      "comment" : "Bullet point describing the no-network runtime policy.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis does not send file paths or process metadata to a server."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis はファイルパスやプロセス情報をサーバーへ送信しません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis 不会把文件路径或进程元数据发送到服务器。"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.welcome.title" : {
+      "comment" : "Title for the onboarding welcome step.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protect local folders with clear prompts"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明確な確認でローカルフォルダを保護"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用清晰提示保护本地文件夹"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.workspaces.body" : {
+      "comment" : "Description for the onboarding workspaces step.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis starts with two suggested workspaces so you can verify the policy surface before later phases wire real protection."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis は 2 つの推奨ワークスペースを初期投入し、後続 phase で実保護を接続する前にポリシー範囲を確認できるようにします。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis 默认注入两个建议工作区，便于你在后续 phase 接入真实保护前先确认策略范围。"
+          }
+        }
+      }
+    },
+    "aegis.onboarding.workspaces.title" : {
+      "comment" : "Title for the onboarding workspaces step.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review default protected folders"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "既定の保護フォルダを確認"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查默认受保护目录"
+          }
+        }
+      }
+    },
+    "aegis.policy.decision.allow" : {
+      "comment" : "Label for the allow timeout policy action.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow access"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクセスを許可"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许访问"
+          }
+        }
+      }
+    },
+    "aegis.policy.decision.deny" : {
+      "comment" : "Label for the deny timeout policy action.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deny access"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクセスを拒否"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拒绝访问"
+          }
+        }
+      }
+    },
+    "aegis.readiness.login_item.detail" : {
+      "comment" : "Detail for the login item readiness row when still pending.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting to be enabled so prompts can appear in the user session."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ログイン中の確認ウィンドウを表示するため有効化待ちです。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待启用，以便在登录会话里显示确认窗口。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.login_item.enabled" : {
+      "comment" : "Detail for the login item readiness row when registration is enabled.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The login item registration is enabled and ready for the agent to report in."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Item の登録は有効で、Agent からの到達報告を待っています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Item 注册已启用，等待 Agent 报到。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.login_item.title" : {
+      "comment" : "Title for the login item readiness row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Item"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Item"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Item"
+          }
+        }
+      }
+    },
+    "aegis.readiness.policy.detail" : {
+      "comment" : "Detail for the policy readiness row when defaults are available.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default folders and timeout policy are already seeded locally."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "既定フォルダとタイムアウト方針はローカルに投入済みです。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "默认目录与超时策略已注入。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.policy.detail.missing" : {
+      "comment" : "Detail for the policy readiness row when no folders are configured yet.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add at least one protected folder to create a local policy baseline."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ローカルポリシー基盤を作るには、少なくとも 1 つの保護フォルダが必要です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "至少配置一个受保护目录，才能建立本地策略基线。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.policy.title" : {
+      "comment" : "Title for the local policy readiness row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local Policy"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ローカルポリシー"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地策略"
+          }
+        }
+      }
+    },
+    "aegis.readiness.protection.detail" : {
+      "comment" : "Detail for the overall readiness row while approvals are still pending.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protection stays pending until the system extension and login item are both ready."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Extension と Login Item の準備が完了するまで、フォルダ保護は保留のままです。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 System Extension 和 Login Item 就绪前，目录保护仍处于待完成状态。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.protection.detail.ready" : {
+      "comment" : "Detail for the overall readiness row when all phase-3 prerequisites are in place.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The login item, extension communication, and local policy baseline are all ready for the next decision-engine phase."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Item、Extension 通信、ローカルポリシー基盤がそろい、次の決定エンジン phase に進めます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Item、Extension 通信和本地策略基线均已就绪，可以进入下一阶段的决策引擎实现。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.protection.detail.missing" : {
+      "comment" : "Detail for the overall readiness row when no protected folders are available yet.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protection cannot start until local protected folders are configured."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ローカルの保護フォルダを設定するまで、保護は開始できません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在本地受保护目录配置完成前，保护不会启动。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.protection.title" : {
+      "comment" : "Title for the overall protection readiness row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protection Readiness"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護準備状況"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保护就绪度"
+          }
+        }
+      }
+    },
+    "aegis.readiness.summary.attention" : {
+      "comment" : "Summary shown when the app still needs system approvals.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local policy is ready, but macOS approvals are still required before protection becomes active."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ローカルポリシーの準備はできていますが、保護を有効にするには macOS の承認がまだ必要です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地策略已就绪，但在保护真正生效前仍需要完成 macOS 授权。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.summary.caption" : {
+      "comment" : "Secondary summary describing the local-only privacy guarantee.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis never uploads workspace or process data."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis はワークスペースやプロセスのデータをアップロードしません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis 不会上传工作区或进程数据。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.summary.ready" : {
+      "comment" : "Summary shown when the app is fully ready.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local protection is ready."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ローカル保護の準備ができています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地保护已就绪。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.system_extension.detail" : {
+      "comment" : "Detail for the system extension readiness row when still pending.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for installation and user approval."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インストールとユーザー承認を待っています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待安装并获得用户批准。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.system_extension.ready" : {
+      "comment" : "Detail for the system extension readiness row when the extension-side contract is responding.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The extension-side IPC contract is responding and can accept policy reload requests."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extension 側の IPC 契約は応答中で、ポリシー再読込要求を受け付けられます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extension 侧的 IPC 契约已可响应，并能接收策略重载请求。"
+          }
+        }
+      }
+    },
+    "aegis.readiness.system_extension.title" : {
+      "comment" : "Title for the system extension readiness row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Extension"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Extension"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Extension"
+          }
+        }
+      }
+    },
+    "aegis.sidebar.overview" : {
+      "comment" : "Sidebar item title for the overview page.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overview"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "概要"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "概览"
+          }
+        }
+      }
+    },
+    "aegis.sidebar.workspaces" : {
+      "comment" : "Sidebar item title for the protected folders page.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protected Folders"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受保护目录"
+          }
+        }
+      }
+    },
+    "aegis.state.needs_attention" : {
+      "comment" : "Status badge label for needs-attention state.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Needs Attention"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要対応"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要处理"
+          }
+        }
+      }
+    },
+    "aegis.state.ready" : {
+      "comment" : "Status badge label for ready state.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ready"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "準備完了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已就绪"
+          }
+        }
+      }
+    },
+    "aegis.state.unavailable" : {
+      "comment" : "Status badge label for unavailable state.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unavailable"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "利用不可"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不可用"
+          }
+        }
+      }
+    },
+    "aegis.state.unknown" : {
+      "comment" : "Status badge label for unknown state.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不明"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知"
+          }
+        }
+      }
+    },
+    "aegis.settings.add_folder" : {
+      "comment" : "Button title for adding a protected folder row in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Protected Folder"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダを追加"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加受保护目录"
+          }
+        }
+      }
+    },
+    "aegis.settings.clear_remembered" : {
+      "comment" : "Button title for clearing all remembered decisions.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear All Remembered Decisions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの判断をすべて消去"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清空全部已记住决策"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.agent_state" : {
+      "comment" : "Label for the agent status diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agent Status"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agent 状態"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agent 状态"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.last_policy_reload" : {
+      "comment" : "Label for the last policy reload timestamp diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Policy Reload"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近のポリシー再読込"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近一次策略重载"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.not_reloaded" : {
+      "comment" : "Fallback diagnostic value when the policy was not reloaded yet.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not reloaded yet"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだ再読込されていません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尚未重载"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.pending_prompts" : {
+      "comment" : "Label for the pending prompt count diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pending Prompts"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保留中の確認要求"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "待处理确认请求"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.policy_store_path" : {
+      "comment" : "Label for the local policy store path diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local Policy Store"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ローカルポリシーストア"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地策略存储"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.remembered_count" : {
+      "comment" : "Label for the remembered decision count diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remembered Decisions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの判断数"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已记住决策数"
+          }
+        }
+      }
+    },
+    "aegis.settings.new_folder_name" : {
+      "comment" : "Base display name for a newly created protected folder entry.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protected Folder"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受保护目录"
+          }
+        }
+      }
+    },
+    "aegis.settings.no_remembered_decisions" : {
+      "comment" : "Empty-state text when no remembered decisions are stored.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No remembered decisions yet."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの判断はまだありません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前还没有已记住决策。"
+          }
+        }
+      }
+    },
+    "aegis.settings.remove_folder" : {
+      "comment" : "Button title for removing a protected folder entry.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除"
+          }
+        }
+      }
+    },
+    "aegis.settings.save_folder" : {
+      "comment" : "Button title for saving a protected folder row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Changes"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変更を保存"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存修改"
+          }
+        }
+      }
+    },
+    "aegis.settings.section.default_behavior" : {
+      "comment" : "Section title for the default fallback behavior block in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Behavior"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "既定動作"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "默认行为"
+          }
+        }
+      }
+    },
+    "aegis.settings.section.diagnostics" : {
+      "comment" : "Section title for the local diagnostics block in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local Diagnostics"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ローカル診断"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地诊断"
+          }
+        }
+      }
+    },
+    "aegis.settings.section.folders" : {
+      "comment" : "Section title for the protected folders block in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protected Folders"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受保护目录"
+          }
+        }
+      }
+    },
+    "aegis.settings.section.remembered_decisions" : {
+      "comment" : "Section title for the remembered decisions block in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remembered Decisions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの判断"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已记住决策"
+          }
+        }
+      }
+    },
+    "aegis.settings.subtitle" : {
+      "comment" : "Subtitle for the consolidated settings page.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage protected folders, default fallback behavior, remembered decisions, and local diagnostics."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダ、既定の回退動作、保存済みの判断、ローカル診断をここで管理します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在这里管理受保护目录、默认回退行为、已记住决策和本地诊断。"
+          }
+        }
+      }
+    },
+    "aegis.settings.title" : {
+      "comment" : "Title for the consolidated settings page.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
+    "aegis.settings.workspace_enabled" : {
+      "comment" : "Toggle title for enabling or disabling protection on a folder row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protection Enabled"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護を有効化"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用保护"
+          }
+        }
+      }
+    },
+    "aegis.settings.workspace_name" : {
+      "comment" : "Text field placeholder for a protected folder display name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder Name"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォルダ名"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目录名称"
+          }
+        }
+      }
+    },
+    "aegis.settings.workspace_path" : {
+      "comment" : "Text field placeholder for a protected folder path.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder Path"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォルダパス"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目录路径"
+          }
+        }
+      }
+    },
+    "aegis.settings.add_folder" : {
+      "comment" : "Button title for adding a protected folder row in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Protected Folder"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダを追加"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加受保护目录"
+          }
+        }
+      }
+    },
+    "aegis.settings.clear_remembered" : {
+      "comment" : "Button title for clearing all remembered decisions.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear All Remembered Decisions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの判断をすべて消去"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清空全部已记住决策"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.agent_state" : {
+      "comment" : "Label for the agent status diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agent Status"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agent 状態"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agent 状态"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.last_policy_reload" : {
+      "comment" : "Label for the last policy reload timestamp diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Policy Reload"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近のポリシー再読込"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近一次策略重载"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.not_reloaded" : {
+      "comment" : "Fallback diagnostic value when the policy was not reloaded yet.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not reloaded yet"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだ再読込されていません"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尚未重载"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.pending_prompts" : {
+      "comment" : "Label for the pending prompt count diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pending Prompts"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保留中の確認要求"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "待处理确认请求"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.policy_store_path" : {
+      "comment" : "Label for the local policy store path diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local Policy Store"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ローカルポリシーストア"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地策略存储"
+          }
+        }
+      }
+    },
+    "aegis.settings.diagnostics.remembered_count" : {
+      "comment" : "Label for the remembered decision count diagnostic row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remembered Decisions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの判断数"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已记住决策数"
+          }
+        }
+      }
+    },
+    "aegis.settings.new_folder_name" : {
+      "comment" : "Base display name for a newly created protected folder entry.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protected Folder"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受保护目录"
+          }
+        }
+      }
+    },
+    "aegis.settings.no_remembered_decisions" : {
+      "comment" : "Empty-state text when no remembered decisions are stored.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No remembered decisions yet."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの判断はまだありません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前还没有已记住决策。"
+          }
+        }
+      }
+    },
+    "aegis.settings.remove_folder" : {
+      "comment" : "Button title for removing a protected folder entry.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除"
+          }
+        }
+      }
+    },
+    "aegis.settings.save_folder" : {
+      "comment" : "Button title for saving a protected folder row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Changes"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変更を保存"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存修改"
+          }
+        }
+      }
+    },
+    "aegis.settings.section.default_behavior" : {
+      "comment" : "Section title for the default fallback behavior block in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Behavior"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "既定動作"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "默认行为"
+          }
+        }
+      }
+    },
+    "aegis.settings.section.diagnostics" : {
+      "comment" : "Section title for the local diagnostics block in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local Diagnostics"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ローカル診断"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地诊断"
+          }
+        }
+      }
+    },
+    "aegis.settings.section.folders" : {
+      "comment" : "Section title for the protected folders block in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protected Folders"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受保护目录"
+          }
+        }
+      }
+    },
+    "aegis.settings.section.remembered_decisions" : {
+      "comment" : "Section title for the remembered decisions block in settings.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remembered Decisions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの判断"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已记住决策"
+          }
+        }
+      }
+    },
+    "aegis.settings.subtitle" : {
+      "comment" : "Subtitle for the consolidated settings page.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage protected folders, default fallback behavior, remembered decisions, and local diagnostics."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダ、既定の回退動作、保存済みの判断、ローカル診断をここで管理します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在这里管理受保护目录、默认回退行为、已记住决策和本地诊断。"
+          }
+        }
+      }
+    },
+    "aegis.settings.title" : {
+      "comment" : "Title for the consolidated settings page.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
+    "aegis.settings.workspace_enabled" : {
+      "comment" : "Toggle title for enabling or disabling protection on a folder row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protection Enabled"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護を有効化"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用保护"
+          }
+        }
+      }
+    },
+    "aegis.settings.workspace_name" : {
+      "comment" : "Text field placeholder for a protected folder display name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder Name"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォルダ名"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目录名称"
+          }
+        }
+      }
+    },
+    "aegis.settings.workspace_path" : {
+      "comment" : "Text field placeholder for a protected folder path.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder Path"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォルダパス"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目录路径"
+          }
+        }
+      }
+    },
+    "aegis.workspaces.subtitle" : {
+      "comment" : "Subtitle for the protected folders page.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggested protected folders are seeded locally for first run."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "初回起動時に推奨フォルダをローカルに投入します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "首次启动时会在本地注入建议目录。"
+          }
+        }
+      }
+    },
+    "aegis.workspaces.timeout_title" : {
+      "comment" : "Label for the timeout fallback policy row.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timeout fallback"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイムアウト時の動作"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "超时回退策略"
+          }
+        }
+      }
+    },
+    "aegis.workspaces.title" : {
+      "comment" : "Title for the protected folders page.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protected Folders"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保護フォルダ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受保护目录"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

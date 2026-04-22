@@ -1,6 +1,6 @@
 # Aegis
 
-Aegis 是一个面向 `macOS 15.0+` 的全新原生安全产品规划仓库，目标是在完全本地化、零第三方依赖的前提下，基于 Apple 官方 `EndpointSecurity` 能力实现受保护目录访问确认。
+Aegis 是一个面向 `macOS 14.5+` 的全新原生安全产品规划仓库，目标是在完全本地化、零第三方依赖的前提下，基于 Apple 官方 `EndpointSecurity` 能力实现受保护目录访问确认。
 
 ## 核心原则
 
@@ -20,5 +20,7 @@ Aegis 是一个面向 `macOS 15.0+` 的全新原生安全产品规划仓库，�
 - 流程控制：`scripts/planctl` + `plan/state.yaml`
 - 分阶段规划：`plan/phases/`
 - 分阶段执行包：`plan/execution/`
+- 发布 runbook：`docs/release/runbook.md`
+- 特权 smoke 与发布前检查：`docs/release/privileged-smoke-checklist.md`、`docs/release/readiness-checklist.md`
 
 README 只保留高层概览，具体约束、阶段计划和执行说明都沉淀在上述规划文档中。

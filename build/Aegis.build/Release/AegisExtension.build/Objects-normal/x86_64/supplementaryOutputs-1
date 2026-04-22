@@ -1,0 +1,9 @@
+"/Users/cyberserval/github/Aegis/AegisExtension/Bootstrap/AegisExtensionBootstrap.swift":
+  objc-header: "/Users/cyberserval/github/Aegis/build/Aegis.build/Release/AegisExtension.build/Objects-normal/x86_64/AegisExtension-Swift.h"
+  swiftdoc: "/Users/cyberserval/github/Aegis/build/Aegis.build/Release/AegisExtension.build/Objects-normal/x86_64/AegisExtension.swiftdoc"
+  dependencies: "/Users/cyberserval/github/Aegis/build/Aegis.build/Release/AegisExtension.build/Objects-normal/x86_64/AegisExtension-master.d"
+  const-values: "/Users/cyberserval/github/Aegis/build/Aegis.build/Release/AegisExtension.build/Objects-normal/x86_64/AegisExtension-master.swiftconstvalues"
+  abi-baseline-json: "/Users/cyberserval/github/Aegis/build/Aegis.build/Release/AegisExtension.build/Objects-normal/x86_64/AegisExtension.abi.json"
+  swiftsourceinfo: "/Users/cyberserval/github/Aegis/build/Aegis.build/Release/AegisExtension.build/Objects-normal/x86_64/AegisExtension.swiftsourceinfo"
+  diagnostics: "/Users/cyberserval/github/Aegis/build/Aegis.build/Release/AegisExtension.build/Objects-normal/x86_64/AegisExtension-master.dia"
+  swiftmodule: "/Users/cyberserval/github/Aegis/build/Aegis.build/Release/AegisExtension.build/Objects-normal/x86_64/AegisExtension.swiftmodule"
