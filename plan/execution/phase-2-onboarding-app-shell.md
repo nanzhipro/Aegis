@@ -27,9 +27,15 @@
 
 ## 交付检查
 
-- 首次启动进入 onboarding
+- 首次启动进入 onboarding（具体表现为自动打开独立的 Onboarding 窗口，而不是 Settings 窗口）
 - 关键状态可展示
 - 三语界面骨架可运行
+- `plutil -p build/Debug/AegisApp.app/Contents/Info.plist` 显示 `LSUIElement => 1`，运行时无 Dock 图标
+- 菜单栏 `MenuBarExtra` 出现 SF Symbol 图标并能展开四项固定菜单（Open Onboarding / Install（或 Reinstall）System Extension / Open Settings / Quit Aegis）
+- Onboarding 窗口与 Settings 窗口在 SwiftUI 代码中被声明为两个互相独立的 scene：Onboarding 使用 `Window(id:)` 或 `WindowGroup`，设置使用 `Settings { ... }`，`SettingsLink` 是唯一唤起设置窗口的方式
+- 非首次启动时点击菜单项“Open Onboarding”仍能唤起 Onboarding 窗口（UI 测试或手工验证皆可）
+- 「Install System Extension」菜单项与 onboarding 的 Install Protection 步骤点击后能触发 `OSSystemExtensionManager.submitRequest`，且 UI 能反映 requesting / awaitingUserApproval / willCompleteAfterReboot / activated / failed 五种状态
+- `Localizable.xcstrings` 中存在 `aegis.menu.open_onboarding`、`aegis.menu.install_extension`、`aegis.menu.install_extension.pending`、`aegis.menu.install_extension.reboot`、`aegis.menu.reinstall_extension` 等键且覆盖 en / zh-Hans / ja
 
 ## 执行裁决规则
 

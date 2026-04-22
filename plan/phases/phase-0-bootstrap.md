@@ -28,6 +28,9 @@
 - 四模块与测试模块的基础目录/target 布局
 - 为后续 Phase 预留的资源、服务、IPC、测试目录结构
 - 初始工程约束说明，避免后续偏离通用约定
+- 预留 `AegisApp/Services/SystemExtensionInstaller.swift` 占位文件（可为空实现）并注册到 AegisApp target，确保 System Extension 激活入口从第 0 阶段起就在工程结构中
+- AegisApp entitlements 预置 `com.apple.developer.system-extension.install` 与 App Group；AegisExtension entitlements 预置 `com.apple.developer.endpoint-security.client`
+- AegisApp target 预置 Embed System Extension 的 Copy/Script build phase，使 `AegisExtension.systemextension` 能落到 `AegisApp.app/Contents/Library/SystemExtensions/`
 
 ## 明确不做
 

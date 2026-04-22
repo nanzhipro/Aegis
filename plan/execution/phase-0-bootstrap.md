@@ -31,6 +31,9 @@
 - 工程可以作为后续 Phase 的稳定底座
 - 无第三方依赖入口
 - 后续 Phase 不需要返工工程分层
+- 存在 `AegisApp/Services/SystemExtensionInstaller.swift` 占位文件并已注册到 AegisApp target
+- AegisApp entitlements 包含 `com.apple.developer.system-extension.install`，AegisExtension entitlements 包含 `com.apple.developer.endpoint-security.client`
+- AegisApp target 含可产出 `AegisApp.app/Contents/Library/SystemExtensions/AegisExtension.systemextension` 的 Embed build phase
 
 ## 执行裁决规则
 

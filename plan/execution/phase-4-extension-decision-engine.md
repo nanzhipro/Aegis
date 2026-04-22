@@ -30,6 +30,10 @@
 - `AUTH_OPEN` 主链路可稳定跑通
 - Apple-signed 默认放行可验证
 - 超时和 Agent 不可达都有明确 fallback
+- `AegisExtension` 中存在 `import EndpointSecurity`，在 bootstrap 阶段调用 `es_new_client`/`es_subscribe`/`es_respond_auth_result`
+- `EndpointSecurityClient` 协议（Sendable）及其真实实现、fake 实现均在仓库中存在，单元测试通过 fake 客户端覆盖 allow / deny / timeout / Apple-signed 直通 / remembered 命中五条路径
+- `ES_NEW_CLIENT_RESULT_ERR_*` 四类错误映射表在代码与日志中均能落地，并通过 IPC 上报到 `IPCStatusSnapshot.extensionService`
+- Extension 未成功订阅 `AUTH_OPEN` 时不得向 App / Agent 声明 ready
 
 ## 执行裁决规则
 

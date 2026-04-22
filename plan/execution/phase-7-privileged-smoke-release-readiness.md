@@ -30,6 +30,11 @@
 - 特权 smoke 有结果、有记录、有结论
 - 正式发布前检查路径清晰可复用
 - 团队可以按文档完成一次完整 release
+- smoke 记录中包含以下四项的真实证据（截图、命令输出或日志）：
+  1. `AegisApp.zip` 解压拖入 `/Applications` 后 `/Applications/AegisApp.app` 正常存在，`/Applications` 下无独立 `AegisAgent.app` 或其它组件
+  2. Extension 启动后日志显示 `es_new_client` 成功并完成 `AUTH_OPEN` 订阅
+  3. AegisApp ↔ AegisExtension、AegisAgent ↔ AegisExtension 两条 XPC 通道均能建立并回传 `statusDidChange`
+  4. 登出再登入后 AegisAgent 自动随系统启动（`SMAppService.status`）
 
 ## 执行裁决规则
 

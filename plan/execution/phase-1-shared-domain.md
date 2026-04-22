@@ -19,6 +19,7 @@
 - 路径工具
 - 策略持久化
 - 本地化资源骨架
+- `AegisShared/IPC/` 中的 XPC 协议声明与跨进程 DTO 的 `NSSecureCoding` 实现
 - `AegisShared` 相关测试
 
 ## 本次不要做
@@ -26,12 +27,16 @@
 - 不提前做 onboarding UI
 - 不提前做 Agent 提示窗
 - 不提前订阅真实 ES 事件
+- 不在本阶段搭建真实 Mach service 监听器与客户端连接
 
 ## 交付检查
 
 - 共享模型和路径规则已经测试化
 - remembered decision 结构可以被后续模块复用
 - `AegisShared` 成为唯一真相来源
+- `AegisShared/IPC/` 存在 `AegisExtensionControlProtocol`、`AegisAppObserverProtocol`、`AegisAgentPromptProtocol` 三条 `@objc` 协议
+- `AccessPromptRequest` / `AccessPromptDecision` / `IPCStatusSnapshot` / `LocalPolicyStore` 等跨进程 DTO 均实现 `NSSecureCoding`
+- `AegisSharedTests` 覆盖上述 DTO 的 `NSSecureCoding` 往返和 `NSXPCInterface.setClasses` 注册完备性
 
 ## 执行裁决规则
 

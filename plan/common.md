@@ -83,14 +83,17 @@ v1 明确不做以下能力：
 - `notarytool`
 - `stapler`
 - `spctl`
-- `hdiutil`
+- `ditto`
+
+v1 的分发产物统一为「已签名、已公证、已 stapled 的 `AegisApp.app`，以 `.zip`（由 `ditto -c -k --keepParent` 打包）作为公证上传和对外分发载体」。不使用 `hdiutil` / `.dmg`，也不使用 `pkgbuild` / `productbuild` / `productsign` / `pkgutil`。
 
 ## Apple 平台约束
 
 本方案遵守以下平台事实：
 
 - `System Extension` 需要由宿主 App 触发安装和用户批准
-- `Login Item` 应使用 `SMAppService`
+- `AegisAgent` 以 LaunchAgent 形态运行于用户登录会话，随登录用户自启；注册方式固定为 `SMAppService.agent(plistName:)` 加载 AegisApp 内嵌的 `Contents/Library/LaunchAgents/<agent>.plist`，禁止使用 `SMAppService.loginItem(identifier:)` 或手工落地到 `~/Library/LaunchAgents/`
+- LaunchAgent plist 的 `BundleProgram` 必须指向嵌入在 `AegisApp.app` 内的 `AegisAgent.app` 可执行文件，不得指向 `/Applications` 下的独立 Agent bundle
 - `Full Disk Access` 不能由 App 直接静默授予，只能通过引导用户完成系统设置
 - 公证分发应使用 `notarytool`
 - 视觉风格应遵循 Apple Human Interface Guidelines 的原生模式，而不是自定义品牌化界面
@@ -108,7 +111,7 @@ v1 明确不做以下能力：
 - 不依赖未文档化字段行为
 - 不依赖 bundle path 推测进程归属
 
-v1 的 ES 订阅实践固定收敛为：
+v1 的 ES 订阅范围固定为：
 
 - 仅订阅 `ES_EVENT_TYPE_AUTH_OPEN`
 
@@ -127,14 +130,41 @@ v1 的 ES 订阅实践固定收敛为：
 - 展示运行状态
 - 展示权限完成度
 
+硬性形态约束：
+
+- `Info.plist` 固定 `LSUIElement=YES`，无 Dock 图标，不以常规窗口应用形态出现
+- 用户入口统一为 `MenuBarExtra`，图标使用 SF Symbol（`shield.lefthalf.filled`，`symbolRenderingMode(.hierarchical)`），禁止使用位图或第三方图标
+- 新手引导窗口与设置窗口必须是两个完全独立的 SwiftUI scene：
+  - 新手引导 / 状态概览窗口使用独立 `Window(id:)` 或 `WindowGroup`，承载 Onboarding flow 与 readiness 汇总
+  - 设置窗口使用 `Settings { ... }` scene，仅通过 `SettingsLink` 唤起
+  - 两窗之间不共享导航栈、不共用 `@FocusedValue`、不互相关联生命周期
+  - 首次启动（首启判定存储在 App Group）必须自动打开 Onboarding 窗口，而不是 Settings 窗口
+  - Onboarding 窗口在任何启动状态下都必须可被菜单项主动唤起，不能只在首次启动可达
+- 菜单栏下拉固定四项且必须全部本地化：
+  1. 打开新手引导 / 主窗口（Open Onboarding）——无条件可点击，随时唤起独立的 Onboarding/状态窗口
+  2. 安装 / 重新安装 System Extension（文案随 `OSSystemExtensionRequest` 状态在 `install` / `pending` / `reboot` / `reinstall` 间切换）
+  3. 打开设置窗口（`SettingsLink`）——设置窗口仅由此入口唤起
+  4. 退出 Aegis（`NSApplication.terminate`，`role: .destructive`）
+- `AegisExtension.systemextension` 必须嵌入 `AegisApp.app/Contents/Library/SystemExtensions/`，由 AegisApp target 的 Copy/Script build phase 在构建时拷贝
+- `AegisAgent.app` 必须作为 bundle 嵌入到 `AegisApp.app/Contents/Library/LoginItems/AegisAgent.app`；不允许将 AegisAgent 作为独立的顶级 app 安装到 `/Applications`
+- LaunchAgent 描述文件必须嵌入到 `AegisApp.app/Contents/Library/LaunchAgents/<agent>.plist`，并由 `SMAppService.agent(plistName:)` 加载；plist 的 `BundleProgram` / `Program` 字段必须相对指向同一 bundle 内的 `Contents/Library/LoginItems/AegisAgent.app/Contents/MacOS/AegisAgent`
+- 激活必须通过 `OSSystemExtensionManager.shared.submitRequest(.activationRequest(...))` 触发；UI 需可视化 `requesting` / `awaitingUserApproval` / `willCompleteAfterReboot` / `activated` / `failed` 五种状态
+- Onboarding 的 `Install Protection` 步骤与菜单栏的安装条目都必须真实调用激活请求，不能只展示引导文案
+
 ### AegisAgent
 
-用户登录会话中的 Login Item，负责：
+用户登录会话中的 LaunchAgent（而非通用 Login Item App），负责：
 
 - 接收访问确认请求
 - 展示原生确认弹窗
 - 把用户决策回传给 Extension
 - 在用户选择“记住此选择”后，将本地规则写回共享策略存储
+
+硬性形态约束：
+
+- AegisAgent 不作为独立的顶级 `.app` 安装；其 bundle 必须嵌入到宿主 AegisApp 内（`AegisApp.app/Contents/Library/LoginItems/AegisAgent.app`）
+- 注册方式固定为 `SMAppService.agent(plistName:)` + 嵌入式 LaunchAgent plist（`AegisApp.app/Contents/Library/LaunchAgents/<agent>.plist`）；不使用 `SMAppService.loginItem(identifier:)`，也不使用 `~/Library/LaunchAgents/` 手工落盘
+- Agent 随 AegisApp 一起签名、公证、分发，禁止独立的 Developer ID 签名身份或独立打包
 
 ### AegisExtension
 
@@ -146,6 +176,15 @@ Endpoint Security System Extension，负责：
 - 优先匹配本地 remembered decision cache
 - 请求 Agent 做人工确认
 - 在 deadline 内完成最终 allow/deny
+
+硬性实现约束：
+
+- 必须 `import EndpointSecurity`，在 bootstrap 中调用 `es_new_client(&client, handler)` 创建客户端，对 `ES_NEW_CLIENT_RESULT_ERR_NOT_ENTITLED`、`_NOT_PRIVILEGED`、`_NOT_PERMITTED`、`_INVALID_ARGUMENT` 做显式错误映射并上报到 `IPCStatusSnapshot.extensionService`
+- 必须调用 `es_subscribe(client, [ES_EVENT_TYPE_AUTH_OPEN], 1)`，订阅集合固定为单事件
+- 事件回调在 deadline 前通过 `es_respond_auth_result(client, message, .auth, cache: false)` 返回结果；超时策略必须保证 `promptTimeoutSeconds = 5` 小于 ES kernel deadline
+- 抽象 `EndpointSecurityClient` 协议（Sendable）承载 `start()` / `stop()` / `handleAuthOpen(_:)`，生产实现绑定真实 `es_*` 调用，单元测试使用 fake 客户端注入
+- AegisExtension entitlements 必须包含 `com.apple.developer.endpoint-security.client`；AegisApp entitlements 必须包含 `com.apple.developer.system-extension.install` 与 App Group
+- Extension 在 ES 客户端成功订阅之前不得向 App/Agent 发出 `extensionService.state = .ready`
 
 ### AegisShared
 
@@ -273,7 +312,7 @@ Aegis 所有视觉和交互都必须贴合 macOS 默认系统体验：
    - 引导用户打开对应设置页
    - 用原生文案说明完成步骤
 4. `Enable Background Prompting`
-   - 注册并确认 `AegisAgent` Login Item
+   - 通过 `SMAppService.agent(plistName:)` 注册并确认 `AegisAgent` LaunchAgent（使用 AegisApp 内嵌的 LaunchAgent plist）
    - 展示 Agent 是否可达
 5. `Readiness Check`
    - 汇总展示：
@@ -338,7 +377,7 @@ Aegis/
 │   ├── archive.sh
 │   ├── sign.sh
 │   ├── notarize.sh
-│   ├── package-dmg.sh
+│   ├── package-app.sh
 │   └── validate-release.sh
 └── .github/
     └── workflows/
@@ -553,26 +592,76 @@ v1 将“相同访问”定义为：
 
 ## IPC 与状态模型
 
-### Extension <-> Agent
+### 传输层
+
+v1 的跨进程通信统一基于 `NSXPCConnection` / `NSXPCListener` 的 Mach Service 通道，不得使用共享容器文件做 prompt 队列或状态同步。
+
+- Mach service 命名带 Team ID 前缀：
+  - Extension 监听：`<TeamID>.com.nanzhipro.AegisExtension.xpc`
+- AegisApp 与 AegisAgent 均作为 XPC 客户端向 Extension 发起 `NSXPCConnection(machServiceName:options:)` 连接；Extension 内部使用 `NSXPCListener` 接受两类客户端
+- 每条连接都是双向：`remoteObjectInterface` + `exportedInterface`，Extension 通过 `exportedInterface` 主动回调 App / Agent，不另开第二条 listener
+- 每条连接必须设置 `setCodeSigningRequirement` 验证对端签名（同一 Team、同一 bundle 前缀），并处理 `invalidationHandler` / `interruptionHandler` 触发的自动重连
+- `NSXPCInterface` 上必须显式 `setClasses(_:for:argumentIndex:ofReply:)` 注册 `AccessPromptRequest` / `AccessPromptDecision` / `IPCStatusSnapshot` / `LocalPolicyStore` 等 `NSSecureCoding` 允许类
+- 所有跨进程协议统一定义在 `AegisShared/IPC/`，不允许各端本地重复声明
+
+### Extension 暴露的远端接口
 
 ```swift
-func evaluateAccessRequest(_ request: AccessPromptRequest) async throws -> AccessPromptDecision
+@objc(AegisExtensionControlProtocol)
+protocol AegisExtensionControlProtocol {
+    func publishClientReady(role: String, withReply reply: @escaping (IPCStatusSnapshot) -> Void)
+    func snapshot(withReply reply: @escaping (IPCStatusSnapshot) -> Void)
+    func reloadPolicy(withReply reply: @escaping (Result<IPCStatusSnapshot, IPCTransportError>) -> Void)
+    func submitDecision(_ decision: AccessPromptDecision,
+                        withReply reply: @escaping (Result<Void, IPCTransportError>) -> Void)
+    func clearRememberedDecisions(workspaceID: UUID?,
+                                  withReply reply: @escaping (Result<Void, IPCTransportError>) -> Void)
+}
 ```
 
 约束：
 
-- Extension 负责超时
-- Agent 只返回用户操作
-- Agent 不存储历史决策
-- Agent 断连、崩溃、无效响应都回退到本地默认策略
-- remember 规则由共享本地策略存储落盘
+- `submitDecision` 使用单一方法承载「一次性决策」与「rememberChoice 持久化」两种情形；持久化由 `AccessPromptDecision.rememberChoice == true` 驱动，写回 `LocalPolicyStoreFileStore`
+- `reloadPolicy` 只做信号触发，策略文件仍由 App 写入
+- `publishClientReady` 供 App / Agent 在建立连接后声明角色；Extension 据此更新 `IPCStatusSnapshot` 的对应端点
 
-### App <-> Agent / Extension
+### App 侧回调接口（App ↔ Extension）
 
 ```swift
-func reloadPolicy() async throws
-func queryStatus() async throws -> ComponentStatus
+@objc(AegisAppObserverProtocol)
+protocol AegisAppObserverProtocol {
+    func statusDidChange(_ snapshot: IPCStatusSnapshot)
+    func extensionDidEmitDiagnostic(_ event: ExtensionDiagnosticEvent)
+}
 ```
+
+约束：
+
+- Extension 在状态变更、ES 订阅失败、Agent 断连等事件时通过 `exportedInterface` 推送 `statusDidChange`，App 据此刷新 `AppRuntime`
+- `extensionDidEmitDiagnostic` 仅承载可本地化 key + 结构化字段，不得把用户路径原文以 public 级别回传
+
+### Agent 侧回调接口（Agent ↔ Extension）
+
+```swift
+@objc(AegisAgentPromptProtocol)
+protocol AegisAgentPromptProtocol {
+    func presentPrompt(_ request: AccessPromptRequest)
+    func cancelPrompt(requestID: UUID)
+    func policyDidReload(_ snapshot: IPCStatusSnapshot)
+}
+```
+
+约束：
+
+- Extension 将 prompt 请求通过 `exportedInterface` 推送到 Agent，Agent 在用户确认后调用 `AegisExtensionControlProtocol.submitDecision`
+- Agent 断连时 Extension 必须按本地默认策略回退，并通过 `AegisAppObserverProtocol.statusDidChange` 通知 App
+- Agent 仅负责 UI 展示与用户操作回传，不得在本地缓存历史决策
+
+### 契约测试要求
+
+- `AegisSharedTests` 必须覆盖：所有跨进程类型的 `NSSecureCoding` 往返、`NSXPCInterface.setClasses` 注册完备性、错误类型在 `Result` 里的编解码
+- IPC 集成测试使用 `NSXPCListener.anonymous` 做 loopback，覆盖：双向握手、Extension 推送 prompt → Agent 回调 submitDecision、Extension 推送 statusDidChange、连接中断后重连、代码签名校验失败导致拒绝连接
+- 不得仅依赖基于文件的状态断言作为 IPC 通过判据
 
 ### 状态展示
 
@@ -804,20 +893,32 @@ xcodebuild -project Aegis.xcodeproj -scheme ReleaseValidationTests -destination 
 
 ### 产物策略
 
-推荐最终对外分发产物为：
+本项目不使用 macOS Installer 包（`.pkg`）。理由：Agent 与 Extension 均作为 bundle 嵌入在 AegisApp 之内，`/Applications` 下只需落地一个 `AegisApp.app`；SystemExtension 由宿主 app 通过 `OSSystemExtensionRequest` 触发用户批准安装，不需要安装器把文件写入系统路径；不存在 LaunchDaemon，不需要 preinstall/postinstall 脚本，也不需要 installer 授权提权。因此 pkg 在本项目没有不可替代的功能价值。
 
-- 已签名、已公证、已 stapled 的 `.dmg`
+最终对外分发产物统一为：
+
+- 已签名、已公证、已 stapled 的 `AegisApp.app`
+- 对外分发载体为 `AegisApp.zip`，由 `ditto -c -k --keepParent AegisApp.app AegisApp.zip` 打包；`notarytool submit` 也使用同一份 zip
+- 用户使用方式：解压 zip 后手工拖入 `/Applications/`；v1 不提供其它安装器形态
+- AegisApp.app 内部目录契约（构建期已固定）：
+  - `AegisApp.app/Contents/Library/SystemExtensions/AegisExtension.systemextension`
+  - `AegisApp.app/Contents/Library/LoginItems/AegisAgent.app`
+  - `AegisApp.app/Contents/Library/LaunchAgents/<agent>.plist`
+- 不产出 `.pkg`，`pkgbuild` / `productbuild` / `productsign` / `pkgutil` 不出现在发布链路
+- 不产出 `.dmg`，`hdiutil` 不出现在发布链路
 
 中间产物包括：
 
 - `.xcarchive`
-- 导出的 `.app`
+- 导出的 `AegisApp.app`（已内嵌 `AegisAgent.app` 与 `AegisExtension.systemextension`）
+- 公证用 `AegisApp.zip`
 - CI 调试 artifact
 
 ### 签名要求
 
-- 使用 `Developer ID Application`
-- 所有嵌套代码必须完整签名
+- AegisApp、AegisAgent、AegisExtension 统一使用同一 `Developer ID Application` 身份
+- 不使用 `Developer ID Installer`，本项目不存在 installer 身份
+- 所有嵌套代码（含 `AegisExtension.systemextension` 与嵌入的 `AegisAgent.app`）必须由内向外完整签名
 - 启用 hardened runtime
 - entitlements 精简且可审计
 
@@ -826,23 +927,29 @@ xcodebuild -project Aegis.xcodeproj -scheme ReleaseValidationTests -destination 
 发布流程固定为：
 
 1. `xcodebuild archive`
-2. 导出 `.app`
-3. 检查 bundle 完整性
-4. 对嵌套代码和主 app 完成签名校验
-5. 生成 `.dmg`
-6. 使用 `notarytool` 提交公证
-7. `stapler` 附加票据
-8. `spctl` 和 `codesign` 完成最终验证
+2. 导出单一 `AegisApp.app`（其中已内嵌 `AegisAgent.app` 与 `AegisExtension.systemextension`）
+3. 检查 bundle 完整性（含 `Contents/Library/SystemExtensions/`、`Contents/Library/LoginItems/AegisAgent.app`、`Contents/Library/LaunchAgents/<agent>.plist`）
+4. 对所有嵌套代码和顶层 AegisApp 完成签名校验（必须由内向外）
+5. 使用 `ditto -c -k --keepParent AegisApp.app AegisApp.zip` 打包公证上传用 zip
+6. 使用 `notarytool submit AegisApp.zip --wait` 提交公证
+7. 使用 `xcrun stapler staple AegisApp.app` 将票据附加到 `.app` 而非 zip
+8. 重新以 `ditto -c -k --keepParent` 把已 stapled 的 `AegisApp.app` 打包为发布 zip
+9. `codesign -vvv --deep --strict`、`spctl --assess --type execute`、`xcrun stapler validate` 完成最终验证
 
 ### 发布校验命令
 
 `scripts/validate-release.sh` 至少应覆盖：
 
 ```bash
-codesign -dvvv --entitlements :- "Aegis.app"
-spctl -a -vv "Aegis.app"
-xcrun stapler validate "Aegis.dmg"
+codesign -vvv --deep --strict "AegisApp.app"
+codesign -dvvv --entitlements :- "AegisApp.app"
+codesign -dvvv --entitlements :- "AegisApp.app/Contents/Library/LoginItems/AegisAgent.app"
+codesign -dvvv --entitlements :- "AegisApp.app/Contents/Library/SystemExtensions/AegisExtension.systemextension"
+spctl --assess --type execute -vv "AegisApp.app"
+xcrun stapler validate "AegisApp.app"
 ```
+
+禁止出现 `spctl --assess --type install`、`pkgutil --check-signature` 等 pkg 专用校验命令。
 
 ### 发布脚本
 
@@ -853,15 +960,17 @@ xcrun stapler validate "Aegis.dmg"
 - `scripts/test.sh`
   - 运行完整自动化测试矩阵
 - `scripts/archive.sh`
-  - 归档应用
+  - 归档应用（单一 AegisApp，内嵌 Agent 与 Extension）
 - `scripts/sign.sh`
-  - 签名和签名校验
+  - 签名和签名校验（覆盖顶层 AegisApp、嵌入的 AegisAgent.app、嵌入的 AegisExtension.systemextension、嵌入的 LaunchAgent plist）
 - `scripts/notarize.sh`
-  - 调用 `notarytool`
-- `scripts/package-dmg.sh`
-  - 生成发行 DMG
+  - 用 `ditto` 打包 zip、调用 `notarytool submit --wait` 公证、用 `stapler` 将票据附加到 `.app`
+- `scripts/package-app.sh`
+  - 生成对外分发的 `AegisApp.zip`（基于已 stapled 的 `AegisApp.app`）
 - `scripts/validate-release.sh`
-  - 运行发布级校验
+  - 运行发布级校验（含 `codesign -vvv --deep --strict`、`spctl --assess --type execute`、`stapler validate`）
+
+既有的 `scripts/package-pkg.sh`、`scripts/distribution.xml`、`scripts/package-dmg.sh` 不再属于发布链路；若仓库中仍存在，必须在发布相关 phase 中移除或显式标注为已停用。
 
 ## GitHub CI 与本地发布验证方案
 
@@ -910,11 +1019,10 @@ xcrun stapler validate "Aegis.dmg"
 职责：
 
 - 归档
-- 导出 app
-- 签名
-- 生成 DMG
-- 公证
-- staple
+- 导出单一 `AegisApp.app`（已内嵌 Agent 与 Extension）
+- 由内向外完成签名
+- 用 `ditto` 打包公证 zip、`notarytool submit --wait` 公证、`stapler staple` 将票据附加到 `.app`
+- 生成发布 zip（`AegisApp.zip`）
 - 发布校验
 - 上传 GitHub Release
 - 所有构建、签名和发布逻辑必须调用仓库内 `scripts/*.sh`，避免把逻辑散落在 workflow YAML 中
@@ -923,15 +1031,15 @@ xcrun stapler validate "Aegis.dmg"
 
 CI 至少需要以下 secrets：
 
-- `DEVELOPER_ID_P12_BASE64`
-- `DEVELOPER_ID_P12_PASSWORD`
+- `DEVELOPER_ID_APPLICATION_P12_BASE64`（Developer ID Application 身份）
+- `DEVELOPER_ID_APPLICATION_P12_PASSWORD`
 - `KEYCHAIN_PASSWORD`
 - `APPLE_TEAM_ID`
 - `APPLE_NOTARY_KEY_ID`
 - `APPLE_NOTARY_ISSUER_ID`
 - `APPLE_NOTARY_PRIVATE_KEY`
 
-推荐使用 App Store Connect Team API Key 驱动 `notarytool`，避免个人 Apple ID 型凭据。
+推荐使用 App Store Connect Team API Key 驱动 `notarytool`，避免个人 Apple ID 型凭据。本项目不需要 Developer ID Installer 身份，CI secrets 中不应出现 installer 相关凭据。
 
 ## 完成定义
 
@@ -943,14 +1051,16 @@ CI 至少需要以下 secrets：
 - 所有界面符合 macOS 默认系统设计风格
 - 至少完整支持英文、简体中文、日文
 - 运行时完全本地化，无云端交互
-- Endpoint Security 保护链路以 `AUTH_OPEN` 为唯一订阅事件并完整可用
+- Endpoint Security 保护链路以 `AUTH_OPEN` 为唯一订阅事件、基于真实 `es_new_client` / `es_subscribe` / `es_respond_auth_result` 调用链完整可用
 - Apple-signed 进程默认放行行为可验证
 - remembered decision cache 可用且可清理
 - 日志符合统一日志最佳实践且敏感信息默认受保护
 - 所有自动化测试全部通过
 - 所有特权 smoke 检查全部通过
-- GitHub CI 可完成构建、测试、打包、签名、公证和发布
-- 最终产物为可分发的已公证 DMG
+- GitHub CI 可完成构建、测试、签名、公证和发布（不含 pkg 环节）
+- `AegisApp` ↔ `AegisExtension` 与 `AegisAgent` ↔ `AegisExtension` 之间的 XPC 双向通道均可用，且通过代码签名校验
+- `AegisAgent` 以 bundle 嵌入形式随 `AegisApp.app` 分发，首次启动可通过 `SMAppService.agent(plistName:)` 注册为 LaunchAgent，并在下一次登录时自启
+- 最终产物为已签名、已公证、已 stapled 的 `AegisApp.app`，对外以 `AegisApp.zip` 形式分发；用户手动拖入 `/Applications/` 后，Agent 与 Extension 以嵌入 bundle 形式位于其中
 
 ## 参考依据
 
