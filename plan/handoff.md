@@ -16,7 +16,7 @@
 - `phase-5` 设置页与本地配置: 完成原生设置页、本地策略编辑持久化、remembered decision 清理、诊断视图与 phase-5 测试，并验证 scripts/test.sh 通过。
 - next focus: 进入 phase-6，落地发布流水线脚本与归档/签名/打包骨架。
 - `phase-6` 签名、公证、CI 与发布链路: 完成发布脚本、GitHub Actions workflows、ReleaseValidationTests 与本地 archive/sign/package/validate 烟测，并验证 scripts/test.sh 通过。
-- next focus: 进入 phase-7，在受控 runner 上串联特权 smoke 与发布 readiness。
+- next focus: 进入 phase-7，在本地完整测试环境串联特权 smoke 与发布 readiness。
 
 ## 下一 Phase
 
@@ -25,6 +25,7 @@
 - execution: `plan/execution/phase-7-privileged-smoke-release-readiness.md`
 
 下一步读取顺序：
+
 1. `plan/common.md`
 2. `plan/phases/phase-7-privileged-smoke-release-readiness.md`
 3. `plan/execution/phase-7-privileged-smoke-release-readiness.md`

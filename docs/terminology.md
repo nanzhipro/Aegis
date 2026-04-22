@@ -6,7 +6,7 @@
 
 ## 什么是 Privileged Smoke
 
-在 Aegis 语境里，privileged smoke 指发布前在受控 macOS 14 及以上环境中进行的最小真实冒烟验证，用来确认自动化无法完整覆盖的系统特权链路是否可用。
+在 Aegis 语境里，privileged smoke 指发布前在本地可完整测试的 macOS 14 及以上环境中进行的最小真实冒烟验证，用来确认自动化无法完整覆盖的系统特权链路是否可用。
 
 它同时具备两个特征：
 
@@ -22,7 +22,7 @@
 - Agent 是否能在登录会话中弹出原生确认。
 - Allow、Deny、remember choice、timeout fallback 等关键分支是否成立。
 
-如果这些验证没有在受控环境中形成真实留痕，即使脚本、公证和签名都通过，也不能认定 phase-7 完成，也不能认定 release ready。
+如果这些验证没有在本地完整测试环境中形成真实留痕，即使脚本、公证和签名都通过，也不能认定 phase-7 完成，也不能认定 release ready。
 
 ## 全局核心概念
 
@@ -172,7 +172,7 @@
 - package-dmg：将最终分发产物打包为 DMG。
 - validate-release：对签名、公证、stapler 和 Gatekeeper 状态做发布前验证。
 - CI：持续集成流程，用于自动执行测试和构建检查。
-- GitHub Actions：Aegis 当前用来承载 CI、release 和 privileged smoke 工作流的自动化平台。
+- GitHub Actions：Aegis 当前用来承载 CI 与 release 自动化流程的平台，不承担 phase-7 的本地特权 smoke。
 - secrets：发布流程中使用的敏感凭据，例如 Developer ID 证书、公证密钥和 keychain 密码。
 
 ## Phase 7：特权 Smoke 与发布准备
@@ -183,13 +183,12 @@
 
 ### Phase 7 关键术语
 
-- privileged smoke：受控 macOS 14 及以上环境中的最小真实特权验证。
-- 受控环境：满足版本和执行约束、可留痕、可信任的 runner 或主机，不等于任意开发机。
-- self-hosted runner：由团队自己控制的 GitHub Actions runner，用于执行托管 runner 无法完成的系统特权验证。
+- privileged smoke：本地 macOS 14 及以上完整测试环境中的最小真实特权验证。
+- 本地完整测试环境：一台 macOS 14 及以上、能够完整执行 System Extension、Full Disk Access、Agent 提示与回退链路验证的本地机器，可以是开发环境，但必须能留痕和复核。
 - release runbook：正式发布的操作手册，定义从预跑到最终留痕的固定流程。
 - readiness checklist：最终发布前的检查清单，用于明确当前是否达到 release ready。
 - smoke record：一次 privileged smoke 的正式记录文件，包含执行环境、步骤结果、证据和结论。
-- blocker record：当受控环境不满足或 smoke 无法执行时，用来记录阻塞事实和 No-Go 结论的文件。
+- blocker record：当本地完整测试环境不满足或 smoke 无法执行时，用来记录阻塞事实和 No-Go 结论的文件。
 - Go / Go with caveats / No-Go：发布结论。分别表示可以发布、带风险发布、不可发布。
 
 ## 术语之间的关系

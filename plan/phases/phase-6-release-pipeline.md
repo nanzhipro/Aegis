@@ -18,7 +18,7 @@
 ## 实施范围
 
 - 落地 `scripts/bootstrap.sh`、`scripts/test.sh`、`scripts/archive.sh`、`scripts/sign.sh`、`scripts/notarize.sh`、`scripts/package-dmg.sh`、`scripts/validate-release.sh`
-- 落地 `ci.yml`、`release.yml`、`privileged-smoke.yml`
+- 落地 `ci.yml`、`release.yml`
 - 固化签名、公证、DMG 打包和发布验证入口
 
 ## 本阶段产出

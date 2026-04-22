@@ -1,46 +1,52 @@
 ---
 version: 1
 completed_phases:
-- phase-0
-- phase-1
-- phase-2
-- phase-3
-- phase-4
-- phase-5
-- phase-6
+  - phase-0
+  - phase-1
+  - phase-2
+  - phase-3
+  - phase-4
+  - phase-5
+  - phase-6
 completion_log:
-- phase_id: phase-0
-  completed_at: '2026-04-21T10:27:10Z'
-  summary: 新建原生 xcodeproj，建立 AegisApp、AegisAgent、AegisExtension、AegisShared 与五个基础测试
-    target 骨架，并补齐 phase-0 目录和 entitlements 占位。
-  next_focus: 在共享模块中落地路径标准化、基础模型与策略持久化，并建立 TDD 底座。
-- phase_id: phase-1
-  completed_at: '2026-04-21T10:50:02Z'
-  summary: 完成共享域模型、路径归一化、策略持久化、基础本地化骨架与统一测试入口，并验证 scripts/test.sh 通过。
-  next_focus: phase-2 onboarding app shell 与状态面板落地
-- phase_id: phase-2
-  completed_at: '2026-04-21T11:12:41Z'
-  summary: 完成宿主 App 的首次启动 onboarding、readiness 聚合面板、默认目录展示、三语本地化骨架与 app/unit/UI 测试，并验证
-    scripts/test.sh 通过。
-  next_focus: phase-3 agent 与 extension 的本地 IPC 骨架
-- phase_id: phase-3
-  completed_at: '2026-04-21T11:30:24Z'
-  summary: 完成共享 IPC 契约、Agent prompt runtime、App 的 login item 状态接口、Extension 最小桥接与
-    rememberChoice 回传，并验证统一入口通过。
-  next_focus: phase-4 extension 决策引擎与 trusted process policy
-- phase_id: phase-4
-  completed_at: '2026-04-21T11:50:23Z'
-  summary: 完成 AUTH_OPEN 决策引擎、trusted process policy、Apple-signed 与 remembered 决策命中、Agent
-    fallback 与 phase-4 测试，并验证 scripts/test.sh 通过。
-  next_focus: phase-5 设置页与本地配置：接入本地策略持久化、设置页编辑与 App/Extension 状态联动。
-- phase_id: phase-5
-  completed_at: '2026-04-21T13:40:35Z'
-  summary: 完成原生设置页、本地策略编辑持久化、remembered decision 清理、诊断视图与 phase-5 测试，并验证 scripts/test.sh
-    通过。
-  next_focus: 进入 phase-6，落地发布流水线脚本与归档/签名/打包骨架。
-- phase_id: phase-6
-  completed_at: '2026-04-21T14:00:15Z'
-  summary: 完成发布脚本、GitHub Actions workflows、ReleaseValidationTests 与本地 archive/sign/package/validate
-    烟测，并验证 scripts/test.sh 通过。
-  next_focus: 进入 phase-7，在受控 runner 上串联特权 smoke 与发布 readiness。
-updated_at: '2026-04-21T14:00:15Z'
+  - phase_id: phase-0
+    completed_at: "2026-04-21T10:27:10Z"
+    summary:
+      新建原生 xcodeproj，建立 AegisApp、AegisAgent、AegisExtension、AegisShared 与五个基础测试
+      target 骨架，并补齐 phase-0 目录和 entitlements 占位。
+    next_focus: 在共享模块中落地路径标准化、基础模型与策略持久化，并建立 TDD 底座。
+  - phase_id: phase-1
+    completed_at: "2026-04-21T10:50:02Z"
+    summary: 完成共享域模型、路径归一化、策略持久化、基础本地化骨架与统一测试入口，并验证 scripts/test.sh 通过。
+    next_focus: phase-2 onboarding app shell 与状态面板落地
+  - phase_id: phase-2
+    completed_at: "2026-04-21T11:12:41Z"
+    summary:
+      完成宿主 App 的首次启动 onboarding、readiness 聚合面板、默认目录展示、三语本地化骨架与 app/unit/UI 测试，并验证
+      scripts/test.sh 通过。
+    next_focus: phase-3 agent 与 extension 的本地 IPC 骨架
+  - phase_id: phase-3
+    completed_at: "2026-04-21T11:30:24Z"
+    summary:
+      完成共享 IPC 契约、Agent prompt runtime、App 的 login item 状态接口、Extension 最小桥接与
+      rememberChoice 回传，并验证统一入口通过。
+    next_focus: phase-4 extension 决策引擎与 trusted process policy
+  - phase_id: phase-4
+    completed_at: "2026-04-21T11:50:23Z"
+    summary:
+      完成 AUTH_OPEN 决策引擎、trusted process policy、Apple-signed 与 remembered 决策命中、Agent
+      fallback 与 phase-4 测试，并验证 scripts/test.sh 通过。
+    next_focus: phase-5 设置页与本地配置：接入本地策略持久化、设置页编辑与 App/Extension 状态联动。
+  - phase_id: phase-5
+    completed_at: "2026-04-21T13:40:35Z"
+    summary:
+      完成原生设置页、本地策略编辑持久化、remembered decision 清理、诊断视图与 phase-5 测试，并验证 scripts/test.sh
+      通过。
+    next_focus: 进入 phase-6，落地发布流水线脚本与归档/签名/打包骨架。
+  - phase_id: phase-6
+    completed_at: "2026-04-21T14:00:15Z"
+    summary:
+      完成发布脚本、GitHub Actions workflows、ReleaseValidationTests 与本地 archive/sign/package/validate
+      烟测，并验证 scripts/test.sh 通过。
+    next_focus: 进入 phase-7，在本地完整测试环境串联特权 smoke 与发布 readiness。
+updated_at: "2026-04-21T14:00:15Z"

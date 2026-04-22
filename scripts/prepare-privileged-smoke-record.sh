@@ -20,18 +20,12 @@ commit_sha=${AEGIS_PRIVILEGED_SMOKE_COMMIT_SHA:-$(git -C "$ROOT_DIR" rev-parse H
 executor=${AEGIS_PRIVILEGED_SMOKE_EXECUTOR:-${GITHUB_ACTOR:-unknown}}
 host_machine=${AEGIS_PRIVILEGED_SMOKE_HOST_MACHINE:-$(scutil --get ComputerName 2>/dev/null || hostname)}
 macos_version=${AEGIS_PRIVILEGED_SMOKE_MACOS_VERSION:-$(sw_vers -productVersion 2>/dev/null || printf 'unknown')}
-runner_label=${AEGIS_PRIVILEGED_SMOKE_RUNNER_LABEL:-${RUNNER_NAME:-aegis-privileged}}
+execution_environment=${AEGIS_PRIVILEGED_SMOKE_ENVIRONMENT:-${AEGIS_PRIVILEGED_SMOKE_RUNNER_LABEL:-local-full-test-environment}}
 validate_result=${AEGIS_PRIVILEGED_SMOKE_VALIDATE_RESULT:-passed}
 release_workflow_run=${AEGIS_RELEASE_WORKFLOW_RUN:-GitHub release workflow for ${release_tag}}
 final_record_path="docs/release/records/${execution_date}-${sanitized_tag}-privileged-smoke.md"
 
-if [ -n "${AEGIS_PRIVILEGED_SMOKE_WORKFLOW_RUN_URL:-}" ]; then
-    privileged_workflow_run=$AEGIS_PRIVILEGED_SMOKE_WORKFLOW_RUN_URL
-elif [ -n "${GITHUB_SERVER_URL:-}" ] && [ -n "${GITHUB_REPOSITORY:-}" ] && [ -n "${GITHUB_RUN_ID:-}" ]; then
-    privileged_workflow_run="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-else
-    privileged_workflow_run="local execution"
-fi
+privileged_smoke_entrypoint=${AEGIS_PRIVILEGED_SMOKE_ENTRYPOINT:-local manual smoke}
 
 if [ -n "${AEGIS_PRIVILEGED_SMOKE_DMG_SHA256:-}" ]; then
     dmg_sha256=$AEGIS_PRIVILEGED_SMOKE_DMG_SHA256
@@ -46,7 +40,7 @@ mkdir -p "$(dirname -- "$output_path")"
 cat >"$output_path" <<EOF
 # Aegis Privileged Smoke Record
 
-本文件由 scripts/prepare-privileged-smoke-record.sh 生成，用于在受控 smoke 环境中直接补齐手工结果。完成后请把最终版本保存到 ${final_record_path}。
+本文件由 scripts/prepare-privileged-smoke-record.sh 生成，用于在本地完整测试环境中直接补齐手工结果。完成后请把最终版本保存到 ${final_record_path}。
 
 ## Metadata
 
@@ -56,13 +50,13 @@ cat >"$output_path" <<EOF
 - Executor: ${executor}
 - Host machine: ${host_machine}
 - macOS version: ${macos_version}
-- Runner label: ${runner_label}
+- Execution environment: ${execution_environment}
 - DMG SHA256: ${dmg_sha256}
 
 ## Preconditions
 
 - Release workflow run: ${release_workflow_run}
-- Privileged smoke workflow run: ${privileged_workflow_run}
+- Privileged smoke entrypoint: ${privileged_smoke_entrypoint}
 - ./scripts/validate-release.sh result: ${validate_result}
 
 ## Manual Smoke Results

@@ -45,16 +45,6 @@ final class ReleaseValidationTests: XCTestCase {
           "./scripts/validate-release.sh",
         ]
       ),
-      (
-        "privileged-smoke.yml",
-        [
-          "self-hosted",
-          "macOS",
-          "aegis-privileged",
-          "./scripts/bootstrap.sh",
-          "./scripts/validate-release.sh",
-        ]
-      ),
     ]
 
     for (fileName, requiredSnippets) in expectations {
@@ -66,21 +56,32 @@ final class ReleaseValidationTests: XCTestCase {
         XCTAssertTrue(contents.contains(snippet), "Expected \(fileName) to contain \(snippet)")
       }
     }
+
+    let removedWorkflowURL = repositoryRoot.appending(path: ".github/workflows/privileged-smoke.yml")
+    XCTAssertFalse(
+      FileManager.default.fileExists(atPath: removedWorkflowURL.path()),
+      "privileged smoke is now a local manual validation flow and should not be modelled as a GitHub workflow"
+    )
   }
 
-  func testBuildProductsContainReleaseRelevantArtifacts() {
-    let productsDirectoryURL = Bundle(for: Self.self).bundleURL.deletingLastPathComponent()
+  func testProjectDeclaresReleaseRelevantArtifacts() throws {
     let requiredProducts = [
-      "AegisApp.app",
-      "AegisAgent.app",
-      "AegisExtension.systemextension",
+      (target: "AegisApp", product: "AegisApp.app"),
+      (target: "AegisAgent", product: "AegisAgent.app"),
+      (target: "AegisExtension", product: "AegisExtension.systemextension"),
     ]
 
-    for productName in requiredProducts {
-      let productURL = productsDirectoryURL.appending(path: productName)
+    for entry in requiredProducts {
+      let settings = try buildSettings(forTarget: entry.target)
+      XCTAssertEqual(
+        settings["FULL_PRODUCT_NAME"],
+        entry.product,
+        "Expected target \(entry.target) to declare product \(entry.product)"
+      )
       XCTAssertTrue(
-        FileManager.default.fileExists(atPath: productURL.path()),
-        "Expected build product \(productName) at \(productURL.path())")
+        settings["TARGET_BUILD_DIR", default: ""].contains("/Build/Products/Debug"),
+        "Expected target \(entry.target) to emit Debug build products into DerivedData"
+      )
     }
   }
 
@@ -105,5 +106,49 @@ final class ReleaseValidationTests: XCTestCase {
     let diagnostics = String(
       decoding: errorPipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
     XCTAssertEqual(process.terminationStatus, 0, diagnostics)
+  }
+
+  private func buildSettings(forTarget target: String) throws -> [String: String] {
+    let process = Process()
+    let outputPipe = Pipe()
+    let errorPipe = Pipe()
+
+    process.currentDirectoryURL = repositoryRoot
+    process.executableURL = URL(filePath: "/usr/bin/xcrun")
+    process.arguments = [
+      "xcodebuild",
+      "-project",
+      "Aegis.xcodeproj",
+      "-target",
+      target,
+      "-configuration",
+      "Debug",
+      "-showBuildSettings",
+    ]
+    process.standardOutput = outputPipe
+    process.standardError = errorPipe
+
+    try process.run()
+    process.waitUntilExit()
+
+    let output = String(
+      decoding: outputPipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
+    let diagnostics = String(
+      decoding: errorPipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
+
+    XCTAssertEqual(process.terminationStatus, 0, diagnostics)
+
+    var settings: [String: String] = [:]
+    for line in output.split(separator: "\n") {
+      guard let separatorRange = line.range(of: " = ") else {
+        continue
+      }
+
+      let key = line[..<separatorRange.lowerBound].trimmingCharacters(in: .whitespaces)
+      let value = line[separatorRange.upperBound...].trimmingCharacters(in: .whitespaces)
+      settings[key] = value
+    }
+
+    return settings
   }
 }

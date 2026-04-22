@@ -1,13 +1,12 @@
 # Aegis Privileged Smoke Checklist
 
-本清单用于 phase-7 的受控 macOS 14 及以上特权 smoke。执行人需要在 release workflow 完成后，在 self-hosted `aegis-privileged` runner 上手动完成以下检查。
+本清单用于 phase-7 的本地 macOS 14 及以上特权 smoke。执行人需要在 release workflow 完成后，在本地完整测试环境中手动完成以下检查。
 
 ## 环境确认
 
-- [ ] 当前机器是受控 macOS 14 及以上版本。
-- [ ] 当前 workflow 为 `.github/workflows/privileged-smoke.yml`。
+- [ ] 当前机器是本地可完整测试的 macOS 14 及以上环境。
 - [ ] 已下载待验证的 `AegisApp.dmg`。
-- [ ] 已准备 workflow 生成的 `build/release/privileged-smoke-record.md` 或回退模板用于留痕。
+- [ ] 已准备本地生成的 `build/release/*-privileged-smoke.md` 或回退模板用于留痕。
 
 ## 安装与签名验证
 
@@ -44,5 +43,5 @@
 
 - [ ] 将结果写入具体 smoke 记录文件。
 - [ ] 若前置条件失败或无法进入人工 smoke，写入 blocker 记录文件并标记 `No-Go`。
-- [ ] 将截图、日志和异常说明附到 workflow run 或关联 issue。
+- [ ] 将截图、日志和异常说明附到本地记录文件或关联 issue。
 - [ ] 在最终发布前检查清单中同步本次结论。

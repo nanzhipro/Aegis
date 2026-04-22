@@ -343,8 +343,7 @@ Aegis/
 └── .github/
     └── workflows/
         ├── ci.yml
-        ├── release.yml
-        └── privileged-smoke.yml
+    └── release.yml
 ```
 
 ### 模块职责
@@ -770,7 +769,7 @@ func queryStatus() async throws -> ComponentStatus
 - GitHub 托管 runner 上无法完整自动化真实的 `System Extension` 用户批准和 `Full Disk Access` 人工授权流程
 - 这些流程必须设计为：
   - 自动化可验证部分
-  - 受控 macOS 14.5 机器上的特权 smoke 测试
+  - 本地 macOS 14.5 完整测试环境中的特权 smoke 测试
 
 因此，“测试全部通过”的定义应包含两部分：
 
@@ -781,7 +780,7 @@ func queryStatus() async throws -> ComponentStatus
 
 - PR：必须通过全部自动化测试
 - Tag Release：必须通过全部自动化测试和发布验证
-- 正式发布前：必须在受控 macOS 14.5 机器完成特权 smoke 测试
+- 正式发布前：必须在本地 macOS 14.5 完整测试环境完成特权 smoke 测试
 
 ### 固定测试入口
 
@@ -864,11 +863,11 @@ xcrun stapler validate "Aegis.dmg"
 - `scripts/validate-release.sh`
   - 运行发布级校验
 
-## GitHub CI 方案
+## GitHub CI 与本地发布验证方案
 
 ### 推荐方案
 
-推荐采用双层 GitHub CI：
+推荐采用“GitHub 自动化 + 本地完整测试环境”两段式方案：
 
 - GitHub 托管 `macos-14` runner
   - 构建
@@ -878,11 +877,12 @@ xcrun stapler validate "Aegis.dmg"
   - 签名
   - 公证
   - 产物校验
-- 受控 self-hosted macOS 14.5 runner
+  - 发布
+- 本地 macOS 14.5 完整测试环境
   - 特权 smoke 测试
   - 安装和引导链路验证
 
-这样可以同时满足自动化和平台现实约束。
+这样可以同时满足自动化需求和 Apple 平台对真实授权链路验证的现实约束。
 
 ### 工作流划分
 
@@ -918,21 +918,6 @@ xcrun stapler validate "Aegis.dmg"
 - 发布校验
 - 上传 GitHub Release
 - 所有构建、签名和发布逻辑必须调用仓库内 `scripts/*.sh`，避免把逻辑散落在 workflow YAML 中
-
-#### `privileged-smoke.yml`
-
-触发：
-
-- `workflow_dispatch`
-- Release 后手动触发
-
-职责：
-
-- 在受控 macOS 14.5 机器安装产物
-- 验证 onboarding
-- 验证 System Extension 安装流
-- 验证 Agent 可达
-- 记录特权 smoke 结果
 
 ### GitHub Secrets
 

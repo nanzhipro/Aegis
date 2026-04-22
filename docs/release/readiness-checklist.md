@@ -20,7 +20,7 @@
 
 ## 特权 smoke
 
-- [ ] 在受控 macOS 14 及以上环境执行了 privileged smoke。
+- [ ] 在本地 macOS 14 及以上完整测试环境执行了 privileged smoke。
 - [ ] 已填写具体 smoke 记录文件。
 - [ ] System Extension 安装和批准链路通过。
 - [ ] Full Disk Access 引导链路通过。
