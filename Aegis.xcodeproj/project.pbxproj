@@ -46,7 +46,19 @@
 		A10000000000000000000025 /* AuthOpenEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000017 /* AuthOpenEventHandler.swift */; };
 		A10000000000000000000026 /* TrustedProcessPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000018 /* TrustedProcessPolicy.swift */; };
 		A10000000000000000000027 /* ExtensionDecisionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000019 /* ExtensionDecisionEngine.swift */; };
+		A10000000000000000000028 /* SystemExtensionInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000001A /* SystemExtensionInstaller.swift */; };
+		A10000000000000000000029 /* SystemExtensionInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000001A /* SystemExtensionInstaller.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A65000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A90000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50000000000000000000003;
+			remoteInfo = AegisExtension;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A20000000000000000000001 /* AegisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegisApp.swift; sourceTree = "<group>"; };
@@ -74,6 +86,7 @@
 		A20000000000000000000017 /* AuthOpenEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthOpenEventHandler.swift; sourceTree = "<group>"; };
 		A20000000000000000000018 /* TrustedProcessPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustedProcessPolicy.swift; sourceTree = "<group>"; };
 		A20000000000000000000019 /* ExtensionDecisionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDecisionEngine.swift; sourceTree = "<group>"; };
+		A2000000000000000000001A /* SystemExtensionInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemExtensionInstaller.swift; sourceTree = "<group>"; };
 		A30000000000000000000001 /* AegisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AegisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30000000000000000000002 /* AegisAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AegisAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30000000000000000000003 /* AegisExtension.systemextension */ = {isa = PBXFileReference; explicitFileType = wrapper.systemextension; includeInIndex = 0; path = AegisExtension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000003 /* AppRuntime.swift */,
+				A2000000000000000000001A /* SystemExtensionInstaller.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -442,10 +456,12 @@
 				A61000000000000000000001 /* Frameworks */,
 				A60000000000000000000001 /* Sources */,
 				A62000000000000000000001 /* Resources */,
+				A64000000000000000000001 /* Embed System Extension */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A66000000000000000000001 /* PBXTargetDependency */,
 			);
 			name = AegisApp;
 			productName = AegisApp;
@@ -619,6 +635,25 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A64000000000000000000001 /* Embed System Extension */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/AegisExtension.systemextension",
+			);
+			name = "Embed System Extension";
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(FULL_PRODUCT_NAME)/Contents/Library/SystemExtensions/AegisExtension.systemextension",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -euo pipefail\napp_bundle=\"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME\"\nsystem_extension=\"$BUILT_PRODUCTS_DIR/AegisExtension.systemextension\"\ndestination=\"$app_bundle/Contents/Library/SystemExtensions\"\nmkdir -p \"$destination\"\nrm -rf \"$destination/AegisExtension.systemextension\"\ncp -R \"$system_extension\" \"$destination/\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A60000000000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -630,6 +665,7 @@
 				A10000000000000000000003 /* AppRuntime.swift in Sources */,
 				A10000000000000000000010 /* OnboardingFlowView.swift in Sources */,
 				A10000000000000000000011 /* AegisSharedDomain.swift in Sources */,
+				A10000000000000000000028 /* SystemExtensionInstaller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,6 +721,7 @@
 				A1000000000000000000001A /* AegisIPC.swift in Sources */,
 				A10000000000000000000013 /* AppRuntime.swift in Sources */,
 				A10000000000000000000014 /* AegisSharedDomain.swift in Sources */,
+				A10000000000000000000029 /* SystemExtensionInstaller.swift in Sources */,
 				A1000000000000000000000A /* AegisAppTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -721,6 +758,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A66000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50000000000000000000003 /* AegisExtension */;
+			targetProxy = A65000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A62000000000000000000001 /* Resources */ = {
@@ -774,6 +819,7 @@
 				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -793,6 +839,7 @@
 				CODE_SIGN_ENTITLEMENTS = AegisApp/AegisApp.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

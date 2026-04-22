@@ -5,24 +5,26 @@
 ## Metadata
 
 - Release tag: unreleased
-- Commit SHA: c1613bc5a63e11181bdcbb651a4e3b3fb4f324d5
+- Commit SHA: bdfc7733cce860c35f918690d95b7d228b74874e
 - Execution date: 2026-04-21
 - Last revalidated at: 2026-04-22
 - Executor: GitHub Copilot
 - Host machine: local workspace host
 - macOS version: 14.7.4
 - Execution environment: local-preflight
-- DMG SHA256: 0f830ada96ce79fd856af0aa147a5ea066fb6520969adce6f8efefc98d622867
+- DMG SHA256: 6ff2cec6801c2d9b19fd78fb419b160b5058ed91718f534b2ac2a2f559d49aa6
 
 ## Preconditions
 
-- Release workflow run: not executed in this session
-- Privileged smoke entrypoint: not executed in this session
-- `./scripts/validate-release.sh` result: passed after local notarization and stapling
+- Release workflow run: GitHub Actions Release workflow_dispatch run `24757169545` currently in progress for `bdfc7733cce860c35f918690d95b7d228b74874e`
+- Privileged smoke entrypoint: local manual smoke pending
+- `./scripts/validate-release.sh` result: passed against the current local DMG
 
 ## Automated Evidence
 
-- Last validation command: `AEGIS_NOTARY_KEYCHAIN_PROFILE=notary-profile ./scripts/notarize.sh && ./scripts/validate-release.sh`
+- Latest CI run: GitHub Actions CI push run `24757008876` passed for `bdfc7733cce860c35f918690d95b7d228b74874e`
+- Current smoke draft: `build/release/2026-04-22-unreleased-privileged-smoke.md`
+- Last validation command: `./scripts/validate-release.sh`
 - Last validation date: 2026-04-22
 - App validation result: passed
 - App Gatekeeper result: accepted
@@ -36,7 +38,7 @@
 
 - Phase-7 completion: blocked
 - Blocking verdict date: 2026-04-22
-- Blocking reason: 当前本地预检已完成 notarization、stapling 和 release validation，但仍然缺少本地 macOS 14 及以上完整测试环境中的完整 privileged smoke 记录。
+- Blocking reason: 当前 `HEAD` 的本地预检、自动化测试和发布级校验都已完成，但仍然缺少本地 macOS 14 及以上完整测试环境中的完整 privileged smoke 记录。
 
 ## Blocking Conditions
 
@@ -48,12 +50,12 @@
 
 1. 将当前已 notarize 且已 stapled 的 DMG 放到本地 macOS 14 及以上完整测试环境中执行完整 smoke。
 2. 按 `docs/release/privileged-smoke-checklist.md` 在本地环境完成人工步骤。
-3. 使用 `./scripts/prepare-privileged-smoke-record.sh` 或 `docs/release/privileged-smoke-record-template.md` 生成正式记录文件，并为每个手工步骤补齐证据。
+3. 从 `build/release/2026-04-22-unreleased-privileged-smoke.md` 继续补齐手工结果，或回退到 `docs/release/privileged-smoke-record-template.md` 生成正式记录文件，并为每个手工步骤补齐证据。
 
 ## Final Decision
 
 - Release readiness: `No-Go`
-- Summary: phase-7 文档与本地发布预检已齐，截至 2026-04-22 复核时，本地 DMG 已完成 notarization、stapling 并通过 `./scripts/validate-release.sh`，但本地 macOS 14 及以上完整测试环境中的完整 privileged smoke 仍未执行。
+- Summary: phase-7 文档、自动化测试与本地发布预检已齐。截至 2026-04-22 复核时，当前 `HEAD` 的 DMG 重新通过 `./scripts/validate-release.sh`，最新 CI 已成功，且本地 smoke 草稿已生成，但本地 macOS 14 及以上完整测试环境中的完整 privileged smoke 仍未执行。
 - Follow-up actions:
   - 在本地完整测试环境中完成真实 smoke，并把结论同步到 `docs/release/readiness-checklist.md`。
   - 形成正式 smoke 留痕后，再判断是否可以完成 phase-7 并写回计划状态。

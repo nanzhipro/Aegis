@@ -28,7 +28,7 @@ struct StatusOverviewView: View {
               case .overview:
                 overviewContent
               case .protectedFolders:
-                settingsContent
+                AegisSettingsContent(runtime: runtime)
               }
             }
             .padding(24)
@@ -41,7 +41,6 @@ struct StatusOverviewView: View {
     .task {
       await runtime.activate()
     }
-    .frame(minWidth: 860, minHeight: 560)
   }
 
   private var overviewContent: some View {
@@ -97,7 +96,30 @@ struct StatusOverviewView: View {
     }
   }
 
-  private var settingsContent: some View {
+}
+
+@MainActor
+struct AegisSettingsScreen: View {
+  @Bindable var runtime: AppRuntime
+
+  var body: some View {
+    ScrollView {
+      AegisSettingsContent(runtime: runtime)
+        .padding(24)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
+    }
+    .frame(minWidth: 860, minHeight: 560)
+    .task {
+      await runtime.activate()
+    }
+  }
+}
+
+@MainActor
+struct AegisSettingsContent: View {
+  @Bindable var runtime: AppRuntime
+
+  var body: some View {
     VStack(alignment: .leading, spacing: 20) {
       VStack(alignment: .leading, spacing: 8) {
         Text("aegis.settings.title")

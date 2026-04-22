@@ -195,6 +195,7 @@ public final class AppRuntime {
   private let policyStoreFileStore: LocalPolicyStoreFileStore
   private let localPolicyStoreURL: URL
   private let isUITesting: Bool
+  private let systemExtensionInstaller: SystemExtensionInstaller
 
   var selectedSidebarItem: SidebarItem = .overview
   var selectedOnboardingStep: OnboardingStep = .welcome
@@ -204,6 +205,7 @@ public final class AppRuntime {
   let isPseudolocalizationEnabled: Bool
   private(set) var ipcStatusSnapshot: IPCStatusSnapshot
   private(set) var isAgentLoginItemEnabled: Bool
+  private(set) var systemExtensionInstallationState: SystemExtensionInstallationState = .idle
 
   private static let diagnosticDateFormatter = ISO8601DateFormatter()
 
@@ -220,6 +222,7 @@ public final class AppRuntime {
     self.localPolicyStoreURL = policyStoreURL
     self.isAgentLoginItemEnabled = loginItemEnabled
     self.ipcStatusSnapshot = .empty()
+    self.systemExtensionInstaller = SystemExtensionInstaller()
 
     let initialPolicyStore = LocalPolicyStore.defaultStore(
       homeDirectoryURL: configuration.homeDirectoryURL)
@@ -389,6 +392,38 @@ public final class AppRuntime {
     } catch {
       componentStatus.systemExtension = .init(
         state: .needsAttention, detail: "aegis.readiness.system_extension.detail")
+    }
+  }
+
+  /// Requests activation of the embedded AegisExtension system extension. The UI observes
+  /// `systemExtensionInstallationState` to reflect progress and failures.
+  func installSystemExtension() {
+    guard !isUITesting else { return }
+    guard !systemExtensionInstallationState.isInProgress else { return }
+
+    systemExtensionInstaller.activate { [weak self] newState in
+      guard let self else { return }
+      self.systemExtensionInstallationState = newState
+      if newState.isActivated {
+        self.componentStatus.systemExtension = .init(
+          state: .ready, detail: "aegis.readiness.system_extension.ready")
+      } else if case .failed = newState {
+        self.componentStatus.systemExtension = .init(
+          state: .needsAttention, detail: "aegis.readiness.system_extension.detail")
+      }
+    }
+  }
+
+  var systemExtensionInstallActionKey: String {
+    switch systemExtensionInstallationState {
+    case .idle, .failed:
+      return "aegis.menu.install_extension"
+    case .requesting, .awaitingUserApproval:
+      return "aegis.menu.install_extension.pending"
+    case .willCompleteAfterReboot:
+      return "aegis.menu.install_extension.reboot"
+    case .activated:
+      return "aegis.menu.reinstall_extension"
     }
   }
 

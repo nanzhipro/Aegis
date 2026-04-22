@@ -1,7 +1,0 @@
-/Users/cyberserval/github/Aegis/AegisExtension/Bootstrap/AegisExtensionBootstrap.swift
-/Users/cyberserval/github/Aegis/AegisExtension/IPC/ExtensionIPCBridge.swift
-/Users/cyberserval/github/Aegis/AegisExtension/EndpointSecurity/AuthOpenEventHandler.swift
-/Users/cyberserval/github/Aegis/AegisExtension/Policy/TrustedProcessPolicy.swift
-/Users/cyberserval/github/Aegis/AegisExtension/Policy/ExtensionDecisionEngine.swift
-/Users/cyberserval/github/Aegis/AegisShared/Models/AegisSharedDomain.swift
-/Users/cyberserval/github/Aegis/AegisShared/IPC/AegisIPC.swift

@@ -57,7 +57,8 @@ final class ReleaseValidationTests: XCTestCase {
       }
     }
 
-    let removedWorkflowURL = repositoryRoot.appending(path: ".github/workflows/privileged-smoke.yml")
+    let removedWorkflowURL = repositoryRoot.appending(
+      path: ".github/workflows/privileged-smoke.yml")
     XCTAssertFalse(
       FileManager.default.fileExists(atPath: removedWorkflowURL.path()),
       "privileged smoke is now a local manual validation flow and should not be modelled as a GitHub workflow"
@@ -83,6 +84,18 @@ final class ReleaseValidationTests: XCTestCase {
         "Expected target \(entry.target) to emit Debug build products into DerivedData"
       )
     }
+  }
+
+  func testAegisAppUsesMenuBarOnlyModeAndEmbedsSystemExtension() throws {
+    let settings = try buildSettings(forTarget: "AegisApp")
+
+    XCTAssertEqual(settings["INFOPLIST_KEY_LSUIElement"], "YES")
+
+    let projectFileURL = repositoryRoot.appending(path: "Aegis.xcodeproj/project.pbxproj")
+    let projectContents = try String(contentsOf: projectFileURL, encoding: .utf8)
+
+    XCTAssertTrue(projectContents.contains("Embed System Extension"))
+    XCTAssertTrue(projectContents.contains("Contents/Library/SystemExtensions"))
   }
 
   private var repositoryRoot: URL {
