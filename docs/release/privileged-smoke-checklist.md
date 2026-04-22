@@ -7,7 +7,7 @@
 - [ ] 当前机器是受控 macOS 14 及以上版本。
 - [ ] 当前 workflow 为 `.github/workflows/privileged-smoke.yml`。
 - [ ] 已下载待验证的 `AegisApp.dmg`。
-- [ ] 已准备 `docs/release/privileged-smoke-record-template.md` 用于留痕。
+- [ ] 已准备 workflow 生成的 `build/release/privileged-smoke-record.md` 或回退模板用于留痕。
 
 ## 安装与签名验证
 

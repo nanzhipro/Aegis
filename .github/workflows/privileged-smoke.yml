@@ -58,19 +58,34 @@ jobs:
           AEGIS_EXPORTED_APP_PATH: ${{ github.workspace }}/build/release/SmokeApp/AegisApp.app
         run: ./scripts/validate-release.sh
 
+      - name: Generate privileged smoke record draft
+        env:
+          AEGIS_PRIVILEGED_SMOKE_TAG: ${{ inputs.release_tag }}
+          AEGIS_PRIVILEGED_SMOKE_COMMIT_SHA: ${{ github.sha }}
+          AEGIS_PRIVILEGED_SMOKE_EXECUTOR: ${{ github.actor }}
+          AEGIS_PRIVILEGED_SMOKE_RUNNER_LABEL: self-hosted,macOS,aegis-privileged
+          AEGIS_PRIVILEGED_SMOKE_VALIDATE_RESULT: passed
+          AEGIS_RELEASE_WORKFLOW_RUN: GitHub release for ${{ inputs.release_tag }}
+          AEGIS_PRIVILEGED_SMOKE_OUTPUT_PATH: ${{ github.workspace }}/build/release/privileged-smoke-record.md
+        run: ./scripts/prepare-privileged-smoke-record.sh
+
       - name: Emit manual privileged smoke checklist
         run: |
+          echo "Generated smoke record draft:"
+          cat build/release/privileged-smoke-record.md
+          echo
           echo "Manual smoke checklist:"
           cat docs/release/privileged-smoke-checklist.md
           echo
           echo "Record template:"
           cat docs/release/privileged-smoke-record-template.md
 
-      - name: Upload smoke documentation templates
+      - name: Upload smoke documentation kit
         uses: actions/upload-artifact@v4
         with:
           name: aegis-privileged-smoke-docs
           path: |
+            build/release/privileged-smoke-record.md
             docs/release/privileged-smoke-checklist.md
             docs/release/privileged-smoke-record-template.md
             docs/release/readiness-checklist.md

@@ -1,6 +1,6 @@
 # Aegis Privileged Smoke Record Template
 
-把本模板复制为具体记录文件，例如 `docs/release/records/2026-04-21-v1.0.0-privileged-smoke.md`，然后填写所有字段。
+优先使用 `.github/workflows/privileged-smoke.yml` 生成的 `build/release/privileged-smoke-record.md` 作为记录草稿；仅在该草稿不可用时，才复制本模板为具体记录文件，例如 `docs/release/records/2026-04-21-v1.0.0-privileged-smoke.md`。
 
 ## Metadata
 

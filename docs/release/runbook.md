@@ -95,19 +95,24 @@ release 完成后，手动触发 `.github/workflows/privileged-smoke.yml`，输�
 
 1. 在受控 macOS 14 及以上 runner 下载 `AegisApp.dmg`。
 2. 解包并运行 `./scripts/validate-release.sh` 验证签名、stapler 与 Gatekeeper。
-3. 输出人工 smoke 提示。
+3. 生成带 release 元数据的 smoke 记录草稿 `build/release/privileged-smoke-record.md`。
+4. 上传 smoke 文档包 artifact，供执行人下载和补充人工证据。
 
 人工执行人必须同时打开：
 
+- workflow 生成的 `build/release/privileged-smoke-record.md`
 - `docs/release/privileged-smoke-checklist.md`
-- `docs/release/privileged-smoke-record-template.md`
 - `docs/release/readiness-checklist.md`
+
+若 workflow 生成的记录草稿不可用，再回退到 `docs/release/privileged-smoke-record-template.md` 手工建档。
 
 ### 4. 留痕并给出结论
 
 完成特权 smoke 后，必须把记录模板保存为具体记录文件，例如：
 
 - `docs/release/records/2026-04-21-v1.0.0-privileged-smoke.md`
+
+推荐流程是先在 workflow artifact 中下载并填写 `privileged-smoke-record.md`，确认结论后再将最终内容落入仓库中的 `docs/release/records/`。
 
 若在进入人工 smoke 前就发现前置条件不满足，也必须写入 blocker 记录，例如：
 
