@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -98,10 +98,10 @@
 		A20000000000000000000018 /* TrustedProcessPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustedProcessPolicy.swift; sourceTree = "<group>"; };
 		A20000000000000000000019 /* ExtensionDecisionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDecisionEngine.swift; sourceTree = "<group>"; };
 		A2000000000000000000001A /* SystemExtensionInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemExtensionInstaller.swift; sourceTree = "<group>"; };
-		A2000000000000000000001B /* libEndpointSecurity.tbd */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.text-based-dylib-definition; name = libEndpointSecurity.tbd; path = usr/lib/libEndpointSecurity.tbd; sourceTree = SDKROOT; };
+		A2000000000000000000001B /* libEndpointSecurity.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libEndpointSecurity.tbd; path = usr/lib/libEndpointSecurity.tbd; sourceTree = SDKROOT; };
 		A30000000000000000000001 /* AegisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AegisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30000000000000000000002 /* AegisAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AegisAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A30000000000000000000003 /* AegisExtension.systemextension */ = {isa = PBXFileReference; explicitFileType = wrapper.systemextension; includeInIndex = 0; path = AegisExtension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000000000000000000003 /* AegisExtension.systemextension */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.system-extension"; path = AegisExtension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30000000000000000000004 /* AegisShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AegisShared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30000000000000000000005 /* AegisSharedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AegisSharedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30000000000000000000006 /* AegisAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AegisAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -179,6 +179,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		82CB19AD2F9916F9003661A9 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000001B /* libEndpointSecurity.tbd */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		A40000000000000000000001 = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +196,7 @@
 				A40000000000000000000015 /* AegisShared */,
 				A4000000000000000000001A /* Tests */,
 				A40000000000000000000002 /* Products */,
+				82CB19AD2F9916F9003661A9 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -651,6 +660,25 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		A62000000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000012 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A62000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000019 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXShellScriptBuildPhase section */
 		A64000000000000000000001 /* Embed System Extension */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -808,25 +836,6 @@
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXResourcesBuildPhase section */
-		A62000000000000000000001 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A10000000000000000000012 /* Localizable.xcstrings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A62000000000000000000002 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A10000000000000000000019 /* Localizable.xcstrings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin XCBuildConfiguration section */
 		A70000000000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -857,6 +866,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AegisApp/AegisApp.entitlements;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -878,6 +888,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AegisApp/AegisApp.entitlements;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -898,6 +909,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AegisAgent/AegisAgent.entitlements;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -917,6 +929,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AegisAgent/AegisAgent.entitlements;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -936,7 +949,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AegisExtension/AegisExtension.entitlements;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSystemExtensionUsageDescription = "Aegis installs a local Endpoint Security extension to monitor access to protected folders.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -949,7 +969,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = AegisExtension/AegisExtension.entitlements;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSystemExtensionUsageDescription = "Aegis installs a local Endpoint Security extension to monitor access to protected folders.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nanzhipro.AegisExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";

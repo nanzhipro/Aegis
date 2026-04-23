@@ -148,6 +148,15 @@ final class ReleaseValidationTests: XCTestCase {
     XCTAssertTrue(projectContents.contains("Contents/Library/SystemExtensions"))
   }
 
+  func testAegisExtensionDeclaresSystemExtensionUsageDescription() throws {
+    let settings = try buildSettings(forTarget: "AegisExtension")
+
+    XCTAssertFalse(
+      settings["INFOPLIST_KEY_NSSystemExtensionUsageDescription", default: ""].isEmpty,
+      "Expected AegisExtension to declare NSSystemExtensionUsageDescription in its generated Info.plist"
+    )
+  }
+
   func testAegisAppEmbedsAgentBundleAndLaunchAgentPlist() throws {
     let projectFileURL = repositoryRoot.appending(path: "Aegis.xcodeproj/project.pbxproj")
     let projectContents = try String(contentsOf: projectFileURL, encoding: .utf8)

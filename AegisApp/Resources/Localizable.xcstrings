@@ -190,7 +190,6 @@
     },
     "aegis.menu.install_extension.pending" : {
       "comment" : "Menu item title while the system extension activation request is still pending user approval.",
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -214,7 +213,6 @@
     },
     "aegis.menu.install_extension.reboot" : {
       "comment" : "Menu item title when the system extension will finish activating after reboot.",
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -238,6 +236,7 @@
     },
     "aegis.menu.open_onboarding" : {
       "comment" : "Menu item title for reopening the onboarding or main status window from the status item.",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1063,7 +1062,6 @@
     },
     "aegis.readiness.system_extension.detail" : {
       "comment" : "Detail for the system extension readiness row when still pending.",
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1087,7 +1085,6 @@
     },
     "aegis.readiness.system_extension.ready" : {
       "comment" : "Detail for the system extension readiness row when the extension-side contract is responding.",
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1111,7 +1108,6 @@
     },
     "aegis.readiness.system_extension.title" : {
       "comment" : "Title for the system extension readiness row.",
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

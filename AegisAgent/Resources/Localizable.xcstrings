@@ -325,6 +325,7 @@
     },
     "aegis.agent.status.busy" : {
       "comment" : "Status text when the agent is currently presenting a prompt.",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -348,6 +349,7 @@
     },
     "aegis.agent.status.ready" : {
       "comment" : "Status text when the agent is reachable and idle.",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -371,6 +373,7 @@
     },
     "aegis.agent.status.unavailable" : {
       "comment" : "Status text when the agent is unavailable.",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -394,6 +397,7 @@
     },
     "aegis.agent.status.unknown" : {
       "comment" : "Status text when the agent state has not been resolved yet.",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -411,29 +415,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "未知"
-          }
-        }
-      }
-    },
-    "aegis.agent.title" : {
-      "comment" : "Agent application title.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aegis Agent"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aegis Agent"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aegis Agent"
           }
         }
       }
@@ -457,6 +438,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "接收确认请求，返回允许或拒绝，并按需在本地记住这次决策。"
+          }
+        }
+      }
+    },
+    "aegis.agent.title" : {
+      "comment" : "Agent application title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis Agent"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis Agent"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aegis Agent"
           }
         }
       }

@@ -1,0 +1,45 @@
+//
+//  Signing.xcconfig (template)
+//
+//  用途：Apple 批准 `com.apple.developer.endpoint-security.client` entitlement、
+//  在开发者门户生成三份 Developer ID Application Provisioning Profile 之后，
+//  将本文件挂到 Xcode 的 Project / Configurations (Debug + Release) 下，
+//  或者把下列键值直接拷贝到每个 product target 的 buildSettings。
+//
+//  -------------------------------------------------------------------
+//  公共配置（三个 product target 全部启用）：
+//  -------------------------------------------------------------------
+//  CODE_SIGN_STYLE = Manual;
+//  DEVELOPMENT_TEAM = <TEAM_ID_PLACEHOLDER>;
+//  ENABLE_HARDENED_RUNTIME = YES;         // 当前 pbxproj 已启用
+//  CODE_SIGN_IDENTITY = "Developer ID Application: <ORG_LEGAL_NAME> (<TEAM_ID_PLACEHOLDER>)";
+//
+//  -------------------------------------------------------------------
+//  Per-target PROVISIONING_PROFILE_SPECIFIER（必须与 Apple Portal 上创建的 profile 名字一致）：
+//  -------------------------------------------------------------------
+//  AegisApp Debug/Release      -> PROVISIONING_PROFILE_SPECIFIER = AegisAppProvisioningProfile;
+//  AegisAgent Debug/Release    -> PROVISIONING_PROFILE_SPECIFIER = AegisAgentProvisioningProfile;
+//  AegisExtension Debug/Release-> PROVISIONING_PROFILE_SPECIFIER = AegisExtensionProvisioningProfile;
+//
+//  -------------------------------------------------------------------
+//  对应的 entitlement 追加项（profile 安装后再启用，避免 ad-hoc 本地构建报错）：
+//  -------------------------------------------------------------------
+//  AegisApp.entitlements：
+//      com.apple.application-identifier = <TEAM_ID_PLACEHOLDER>.com.nanzhipro.AegisApp
+//      com.apple.developer.team-identifier = <TEAM_ID_PLACEHOLDER>
+//  AegisAgent.entitlements：
+//      com.apple.application-identifier = <TEAM_ID_PLACEHOLDER>.com.nanzhipro.AegisAgent
+//      com.apple.developer.team-identifier = <TEAM_ID_PLACEHOLDER>
+//  AegisExtension.entitlements：
+//      com.apple.application-identifier = <TEAM_ID_PLACEHOLDER>.com.nanzhipro.AegisExtension
+//      com.apple.developer.team-identifier = <TEAM_ID_PLACEHOLDER>
+//
+//  -------------------------------------------------------------------
+//  Apple Portal 创建 Profile 时必须勾选的 capability：
+//  -------------------------------------------------------------------
+//  AegisApp    -> App Groups (group.com.nanzhipro.Aegis), System Extension
+//  AegisAgent  -> App Groups (group.com.nanzhipro.Aegis)
+//  AegisExtension -> App Groups (group.com.nanzhipro.Aegis), Endpoint Security
+//                    (后者需先邮件申请 com.apple.developer.endpoint-security.client 获得批准)
+//
+//  完整激活顺序详见 docs/system-extension-requirements.md 第四节「待用户/开发者侧操作」。
