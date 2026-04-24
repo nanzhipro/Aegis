@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Aegis · identity guard (repo-distributed)
+# -----------------------------------------
+# 强制本仓库的提交身份必须为：
+#   user.name  = 南朋友
+#   user.email = deer_hope@live.cn
+#
+# 本脚本随仓库分发；通过 scripts/hooks/install.sh 注册为 git hooksPath。
+# 未注册时不会生效，但一旦注册，身份不匹配即拒绝提交。
+#
+# 修复命令:
+#   git config --local user.name  "南朋友"
+#   git config --local user.email "deer_hope@live.cn"
+
+set -eu
+
+EXPECTED_NAME="南朋友"
+EXPECTED_EMAIL="deer_hope@live.cn"
+
+# 允许开发者临时绕过（例如 cherry-pick 他人提交）：
+#   AEGIS_SKIP_IDENTITY_GUARD=1 git commit ...
+if [ "${AEGIS_SKIP_IDENTITY_GUARD:-0}" = "1" ]; then
+    printf '[identity-guard] 已临时跳过身份校验（AEGIS_SKIP_IDENTITY_GUARD=1）\n' >&2
+    exit 0
+fi
+
+actual_name=$(git config --get user.name || true)
+actual_email=$(git config --get user.email || true)
+
+if [ "$actual_name" != "$EXPECTED_NAME" ] || [ "$actual_email" != "$EXPECTED_EMAIL" ]; then
+    printf '\033[31m[identity-guard] 提交被拒绝\033[0m\n' >&2
+    printf '  期望: %s <%s>\n' "$EXPECTED_NAME" "$EXPECTED_EMAIL" >&2
+    printf '  实际: %s <%s>\n' "${actual_name:-<empty>}" "${actual_email:-<empty>}" >&2
+    printf '\n修复命令:\n' >&2
+    printf '  git config --local user.name  "%s"\n' "$EXPECTED_NAME" >&2
+    printf '  git config --local user.email "%s"\n' "$EXPECTED_EMAIL" >&2
+    printf '\n临时跳过一次:\n' >&2
+    printf '  AEGIS_SKIP_IDENTITY_GUARD=1 git commit ...\n' >&2
+    exit 1
+fi
